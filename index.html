@@ -45,7 +45,6 @@
             margin-top: 5px;
         }
 
-        /* Menu de abas */
         .nav-tabs {
             display: flex;
             justify-content: space-between;
@@ -76,7 +75,6 @@
             color: #121214;
         }
 
-        /* Caixas de Conteúdo */
         .app-box {
             background-color: #1a1a1e;
             padding: 20px;
@@ -132,7 +130,6 @@
             color: #fff;
         }
 
-        /* Estilo de Resultados */
         .result-box {
             background-color: #1a1a1e;
             padding: 20px;
@@ -185,7 +182,6 @@
             color: #ffffff;
         }
 
-        /* Lista de nicks e dicas */
         .nick-list {
             margin-top: 15px;
         }
@@ -312,7 +308,6 @@
     </div>
 
     <script>
-        // Função para alternar as abas do menu
         function switchTab(tabId) {
             document.querySelectorAll('.app-box').forEach(box => box.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -321,7 +316,7 @@
             event.target.classList.add('active');
         }
 
-        // LÓGICA DA SENSI (Mantida exatamente como estava)
+        // LÓGICA DA SENSI CALIBRADA POR MARCA
         function gerarConfiguracaoDinamica() {
             const input = document.getElementById('celular').value.trim().toUpperCase();
             const resultadoDiv = document.getElementById('resultado');
@@ -342,24 +337,64 @@
 
             let dpi, geral, mira2x, mira4x, botao, ponteiro, atraso;
 
+            // 1. Tratamento para Apple (iOS)
             if (input.includes('IPHONE') || input.includes('APPLE') || input.includes('IPAD')) {
                 dpi = "Padrão iOS (120 Mv)";
-                geral = Math.floor(Math.random() * (200 - 120 + 1)) + 120;
-                mira2x = Math.floor(geral * 0.92);
-                mira4x = Math.floor(geral * 0.88);
-                botao = Math.floor(Math.random() * (52 - 41 + 1)) + 41 + "%";
+                geral = Math.floor(Math.random() * (100 - 95 + 1)) + 95; // Sensi alta estável no iOS
+                mira2x = Math.floor(geral * 0.94);
+                mira4x = Math.floor(geral * 0.91);
+                botao = Math.floor(Math.random() * (47 - 42 + 1)) + 42 + "%";
                 ponteiro = "Máxima";
                 atraso = "0,25s";
-            } else {
-                dpi = Math.floor(Math.random() * (960 - 410 + 1)) + 410;
-                geral = Math.floor(Math.random() * (200 - 105 + 1)) + 105; 
+            } 
+            // 2. Tratamento para Samsung de alta performance (Linha S)
+            else if (input.includes('S20') || input.includes('S21') || input.includes('S22') || input.includes('S23') || input.includes('S24')) {
+                dpi = Math.floor(Math.random() * (560 - 480 + 1)) + 480; // Telas sensíveis não precisam de DPI extrema
+                geral = Math.floor(Math.random() * (98 - 94 + 1)) + 94;
+                mira2x = Math.floor(geral * 0.96);
+                mira4x = Math.floor(geral * 0.92);
+                botao = Math.floor(Math.random() * (52 - 46 + 1)) + 46 + "%";
+                ponteiro = "7 / 10";
+                atraso = "Curto (0.5s)";
+            }
+            // 3. Tratamento Geral para Samsung (Linhas A e M)
+            else if (input.includes('SAMSUNG') || input.includes('GALAXY')) {
+                dpi = Math.floor(Math.random() * (780 - 640 + 1)) + 640; // Telas intermediárias exigem mais DPI
+                geral = 100; // Trava no máximo para compensar o peso da tela
+                mira2x = 98;
+                mira4x = 95;
+                botao = Math.floor(Math.random() * (48 - 43 + 1)) + 43 + "%";
+                ponteiro = "9 / 10";
+                atraso = "Curto (0.5s)";
+            }
+            // 4. Tratamento para Xiaomi / Poco / Redmi
+            else if (input.includes('XIAOMI') || input.includes('POCO') || input.includes('REDMI')) {
+                dpi = Math.floor(Math.random() * (890 - 720 + 1)) + 720; // Excelente resposta a DPIs altas
+                geral = Math.floor(Math.random() * (99 - 95 + 1)) + 95;
+                mira2x = Math.floor(geral * 0.97);
+                mira4x = Math.floor(geral * 0.93);
+                botao = Math.floor(Math.random() * (50 - 44 + 1)) + 44 + "%";
+                ponteiro = "8 / 10";
+                atraso = "Curto (0.5s)";
+            }
+            // 5. Tratamento para Motorola
+            else if (input.includes('MOTOROLA') || input.includes('MOTO')) {
+                dpi = Math.floor(Math.random() * (680 - 580 + 1)) + 580;
+                geral = 99;
+                mira2x = 96;
+                mira4x = 92;
+                botao = Math.floor(Math.random() * (53 - 47 + 1)) + 47 + "%";
+                ponteiro = "10 / 10";
+                atraso = "Curto (0.5s)";
+            }
+            // 6. Outros dispositivos validados (Realme, Infinix, ASUS, etc.)
+            else {
+                dpi = Math.floor(Math.random() * (650 - 500 + 1)) + 500;
+                geral = Math.floor(Math.random() * (100 - 94 + 1)) + 94;
                 mira2x = Math.floor(geral * 0.95);
-                if (mira2x > 200) mira2x = 200;
-                mira4x = Math.floor(geral * 0.90);
-                if (mira4x > 200) mira4x = 200;
-                botao = Math.floor(Math.random() * (60 - 40 + 1)) + 40 + "%";
-                const barrasPonteiro = Math.floor(Math.random() * (10 - 8 + 1)) + 8;
-                ponteiro = barrasPonteiro + " / 10";
+                mira4x = Math.floor(geral * 0.92);
+                botao = Math.floor(Math.random() * (50 - 45 + 1)) + 45 + "%";
+                ponteiro = "8 / 10";
                 atraso = "Curto (0.5s)";
             }
 
@@ -382,7 +417,6 @@
             document.getElementById('celular').value = "";
         }
 
-        // LÓGICA DA CALCULADORA DE HS
         function calcularTaxaHS() {
             const abates = parseFloat(document.getElementById('abates').value);
             const capas = parseFloat(document.getElementById('capas').value);
@@ -405,13 +439,12 @@
             if (taxa < 35) status = "Pode melhorar! Treine a puxada.";
             else if (taxa < 55) status = "Sensi boa! Jogador equilibrado.";
             else if (taxa < 75) status = "Monstro! Nível competitivo.";
-            else status = "Xiter legítimo! Taxa absurda.";
+            else status = "Fera demais! Taxa absurda.";
 
             document.getElementById('res-status').innerText = status;
             resBox.style.display = 'block';
         }
 
-        // LÓGICA DO GERADOR DE NICKS
         function gerarNicks() {
             const base = document.getElementById('nome-nick').value.trim();
             if (base === "") {
