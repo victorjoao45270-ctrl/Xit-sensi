@@ -233,11 +233,11 @@
         </header>
 
         <div class="nav-tabs">
-            <button class="tab-btn active" onclick="switchTab('tab-sensi', event)">Sensi</button>
-            <button class="tab-btn" onclick="switchTab('tab-hud', event)">HUDs</button>
-            <button class="tab-btn" onclick="switchTab('tab-hs', event)">Taxa HS</button>
-            <button class="tab-btn" onclick="switchTab('tab-nicks', event)">Nicks</button>
-            <button class="tab-btn" onclick="switchTab('tab-dicas', event)">Treino</button>
+            <button class="tab-btn active" onclick="switchTab('tab-sensi', this)">Sensi</button>
+            <button class="tab-btn" onclick="switchTab('tab-hud', this)">HUDs</button>
+            <button class="tab-btn" onclick="switchTab('tab-hs', this)">Taxa HS</button>
+            <button class="tab-btn" onclick="switchTab('tab-nicks', this)">Nicks</button>
+            <button class="tab-btn" onclick="switchTab('tab-dicas', this)">Treino</button>
         </div>
 
         <div id="tab-sensi" class="app-box active">
@@ -331,13 +331,14 @@
     </div>
 
     <script>
-        function switchTab(tabId, e) {
-            document.querySelectorAll('.app-box').forEach(box => box.classList.remove('active'));
+        // Correção definitiva na alternância de abas
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.app-box').forEach(box => box.style.display = 'none');
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             
-            document.getElementById(tabId).classList.add('active');
-            if (e && e.target) {
-                e.target.classList.add('active');
+            document.getElementById(tabId).style.display = 'block';
+            if (element) {
+                element.classList.add('active');
             }
         }
 
@@ -471,4 +472,4 @@
         }
 
         function calcularTaxaHS() {
-            const abates = parseFloat(document.getElementById('abates')
+            const abates = 
