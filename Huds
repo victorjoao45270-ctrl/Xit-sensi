@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de HUDs Pro - FF</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        body {
+            background-color: #121214;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 35px 15px;
+            background: linear-gradient(135deg, #2f3640, #1c2025);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border-bottom: 3px solid #00f5d4;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            color: #00f5d4;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            color: #a4b0be;
+            margin-top: 8px;
+            font-size: 0.95rem;
+        }
+
+        .app-box {
+            background-color: #1a1a1e;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 15px;
+            color: #00f5d4;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            border-radius: 8px;
+            border: 2px solid #29292e;
+            background-color: #121214;
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        select:focus {
+            border-color: #00f5d4;
+        }
+
+        button.main-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: #00f5d4;
+            border: none;
+            border-radius: 8px;
+            color: #121214;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background 0.2s;
+        }
+
+        button.main-btn:hover {
+            background-color: #00b894;
+            color: #fff;
+        }
+
+        .result-box {
+            background-color: #121214;
+            padding: 22px;
+            border-radius: 8px;
+            display: none;
+            border-left: 5px solid #ff9f43;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        .result-box h3 {
+            color: #ff9f43;
+            margin-bottom: 18px;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+        }
+
+        .section-title {
+            color: #00f5d4;
+            font-size: 0.95rem;
+            margin: 20px 0 12px 0;
+            text-transform: uppercase;
+            border-bottom: 1px dashed #29292e;
+            padding-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+            border-bottom: 1px solid #1a1a1e;
+            padding-bottom: 8px;
+        }
+
+        .result-item span {
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .hud-desc {
+            line-height: 1.6;
+            color: #ced6e0;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Gerador de HUDs FF</h1>
+            <p>Layouts Pro Aleatórios e Configuráveis</p>
+        </header>
+
+        <div class="app-box">
+            <label for="select-dedos">Escolha a quantidade de dedos:</label>
+            <select id="select-dedos">
+                <option value="2">HUD 2 Dedos (Clássico)</option>
+                <option value="3">HUD 3 Dedos (Movimentação)</option>
+                <option value="4">HUD 4 Dedos (Competitivo / Pro)</option>
+                <option value="5">HUD 5 Dedos (Tela Larga / Tablet)</option>
+                <option value="6">HUD 6 Dedos (Instaplayer Extremo)</option>
+            </select>
+            
+            <button class="main-btn" onclick="gerarNovoHudAleatorio()">Gerar HUD Aleatório</button>
+        </div>
+
+        <div id="resultado-hud" class="result-box">
+            <h3 id="hud-titulo">HUD Configurado</h3>
+            
+            <div class="section-title">Ajustes de Botões Principais</div>
+            <div class="result-item">Botão de Atirar: <span id="hud-botao-tam" style="color: #ff4757;">-</span></div>
+            <div class="result-item">Transparência Geral: <span id="hud-transp">-</span></div>
+            <div class="result-item">Botão de Agachar: <span id="hud-agachar-tam">-</span></div>
+            <div class="result-item">Botão de Pular: <span id="hud-pular-tam">-</span></div>
+            
+            <div class="section-title">Mapeamento e Posições do Layout</div>
+            <div class="hud-desc" id="hud-mapa-desc"></div>
+        </div>
+    </div>
+
+    <script>
+        function gerarNovoHudAleatorio() {
+            const dedos = document.getElementById('select-dedos').value;
+            const painelBox = document.getElementById('resultado-hud');
+
+            // Sorteios independentes de tamanhos para ser sempre diferente
+            const tamAtirar = Math.floor(Math.random() * (58 - 39 + 1)) + 39 + "%";
+            const tamAgachar = Math.floor(Math.random() * (90 - 65 + 1)) + 65 + "%";
+            const tamPular = Math.floor(Math.random() * (95 - 70 + 1)) + 70 + "%";
+            const transparencia = Math.floor(Math.random() * (60 - 15 + 1)) + 15 + "%";
+
+            // Listas de variações de texto por categoria
+            const posicoesPulo = [
+                "Canto superior direito (perto do mapa para toque rápido)", 
+                "Região inferior direita clássica invertida com mirar", 
+                "Topo superior esquerdo para controle do indicador"
+            ];
+            const posicoesAgachar = [
+                "Canto inferior esquerdo colado ao analógico para agachar rápido", 
+                "Canto inferior direito abaixo do botão de pulo", 
+                "Topo esquerdo bem na extremidade da tela"
+            ];
+            const posicoesGelo = [
+                "Canto inferior esquerdo com tamanho 100% para defesa imediata", 
+                "Região central esquerda para ativação instantânea", 
+                "Topo esquerdo centralizado para jogadas rápidas"
+            ];
+            const estilosFoco = [
+                "Focado em troca de armas rápida e controle de mira.",
+                "Otimizado para gelo agachado sem travar a tela.",
+                "Focado em dar um tiro, trocar para panela e correr.",
+                "Foco total em estabilidade de mira e precisão de AR."
+            ];
+
+            // Seleciona itens aleatórios das listas
+            const localPulo = posicoesPulo[Math.floor(Math.random() * posicoesPulo.length)];
+            const localAgachar = posicoesAgachar[Math.floor(Math.random() * posicoesAgachar.length)];
+            const localGelo = posicoesGelo[Math.floor(Math.random() * posicoesGelo.length)];
+            const estiloFoco = estilosFoco[Math.floor(Math.random() * estilosFoco.length)];
+
+            let titulo = "";
+            let mapaDesc = "";
+
+            if (dedos === "2") {
+                titulo = "HUD 2 Dedos Aleatório";
+                mapaDesc = `• <strong>Botão de Atirar:</strong> Inferior Direito tradicional.<br>` +
+                           `• <strong>Botão de Pular:</strong> Canto inferior direito modificado.<br>` +
+                           `• <strong>Botão de Agachar:</strong> ${localAgachar}.<br>` +
+                           `• <strong>Posição do Gelo:</strong> Lado esquerdo da tela.<br>` +
+                           `• <strong>Estilo do Layout:</strong> ${estiloFoco}`;
+            } 
+            else if (dedos === "3") {
+                titulo = "HUD 3 Dedos Aleatório";
+                mapaDesc = `• <strong>Botão de Atirar:</strong> Inferior Direito limpo.<br>` +
+                           `• <strong>Botão de Pular ou Troca:</strong> Realocado no ${localPulo} para o indicador esquerdo.<br>` +
+                           `• <strong>Botão de Agachar:</strong> ${localAgachado}.<br>` +
+                           `• <strong>Posição do Gelo:</strong> ${localGelo}.<br>` +
+                           `• <strong>Estilo do Layout:</strong> ${estiloFoco}`;
+            } 
+            else if (dedos === "4") {
+                titulo = "HUD 4 Dedos Aleatório (Pro)";
+                mapaDesc = `• <strong>Botão de Mirar:</strong> Topo superior direito (Indicador Direito).<br>` +
+                           `• <strong>Botão de Pular:</strong> Topo superior esquerdo (Indicador Esquerdo).<br>` +
+                           `• <strong>Botão de Agachar:</strong> ${localAgachado}.<br>` +
+                           `• <strong>Posição do Gelo:</strong> ${localGelo}.<br>` +
+                           `• <strong>Estilo do Layout:</strong> ${estiloFoco}`;
+            }
+            else if (dedos === "5") {
+                titulo = "HUD 5 Dedos Aleatório (Elite)";
+                mapaDesc = `• <strong>Mão Esquerda:</strong> Dedão no analógico, indicador no agachar e dedo médio no Gelo.<br>` +
+                           `• <strong>Mão Direita:</strong> Dedão na câmera/tiro e indicador no pulo rápido.<br>` +
+                           `• <strong>Posição do Gelo:</strong> ${localGelo}.<br>` +
+                           `• <strong>Estilo do Layout:</strong> Perfeito para movimentação ultra avançada.`;
+            }
+            else if (dedos === "6") {
+                titulo = "HUD 6 Dedos Aleatório (Instaplayer)";
+                mapaDesc = `• <strong>Mapeamento:</strong> 3 dedos ativos na esquerda superior e 3 dedos na direita superior.<br>` +
+                           `• <strong>Gatilhos Rápidos:</strong> Botões de gelo, agachar e pular movidos inteiramente para o topo.<br>` +
+                           `• <strong>Botão de Atirar Secundário:</strong> Ativo na esquerda para tiros instantâneos.<br>` +
+                           `• <strong>Estilo do Layout:</strong> Resposta tátil máxima para telas grandes.`;
+            }
+
+            // Alimenta o HTML com os valores novos gerados
+            document.getElementById('hud-titulo').innerText = titulo;
+            document.getElementById('hud-botao-tam').innerText = tamAtirar;
+            document.getElementById('hud-transp').innerText = transparencia;
+            document.getElementById('hud-agachar-tam').innerText = tamAgachar;
+            document.getElementById('hud-pular-tam').innerText = tamPular;
+            document.getElementById('hud-mapa-desc').innerHTML = mapaDesc;
+
+            // Mostra a caixa de resultado
+            painelBox.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
