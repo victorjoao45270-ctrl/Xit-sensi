@@ -256,9 +256,9 @@
                 <div class="result-item">Atraso ao Tocar e Pressionar: <span id="res-atraso">-</span></div>
                 
                 <div class="section-title">Sensibilidade In-Game (Free Fire)</div>
-                <div class="result-item">Geral (Até 200): <span id="res-geral" style="color: #00cec9;">-</span></div>
-                <div class="result-item">Mira 2x (Até 200): <span id="res-2x">-</span></div>
-                <div class="result-item">Mira 4x (Até 200): <span id="res-4x">-</span></div>
+                <div class="result-item">Geral (0-200): <span id="res-geral" style="color: #00cec9;">-</span></div>
+                <div class="result-item">Mira 2x (0-200): <span id="res-2x">-</span></div>
+                <div class="result-item">Mira 4x (0-200): <span id="res-4x">-</span></div>
                 <div class="result-item">Botão de Atirar: <span id="res-botao" style="color: #ff6b6b;">-</span></div>
             </div>
         </div>
@@ -313,13 +313,12 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             
             document.getElementById(tabId).classList.add('active');
-            
-            // Corrige o bug de clique nas abas
             if (event && event.target) {
                 event.target.classList.add('active');
             }
         }
 
+        // NOVA LÓGICA DE CALIBRAÇÃO EXATA E VARIÁVEL DE 0 A 200
         function gerarConfiguracaoDinamica() {
             const input = document.getElementById('celular').value.trim().toUpperCase();
             const resultadoDiv = document.getElementById('resultado');
@@ -340,67 +339,45 @@
 
             let dpi, geral, mira2x, mira4x, botao, ponteiro, atraso;
 
+            // Define faixas de DPI de acordo com a marca do aparelho
             if (input.includes('IPHONE') || input.includes('APPLE') || input.includes('IPAD')) {
                 dpi = "Padrão iOS (120 Mv)";
-                geral = Math.floor(Math.random() * (195 - 180 + 1)) + 180; 
-                mira2x = Math.floor(geral * 0.95);
-                mira4x = Math.floor(geral * 0.92);
-                botao = Math.floor(Math.random() * (47 - 42 + 1)) + 42 + "%";
+                // iOS varia livremente em uma escala alta equilibrada
+                geral = Math.floor(Math.random() * (190 - 110 + 1)) + 110; 
                 ponteiro = "Máxima";
                 atraso = "0,25s";
-            } 
-            else if (input.includes('S20') || input.includes('S21') || input.includes('S22') || input.includes('S23') || input.includes('S24')) {
-                dpi = Math.floor(Math.random() * (560 - 480 + 1)) + 480; 
-                geral = Math.floor(Math.random() * (185 - 170 + 1)) + 170;
-                mira2x = Math.floor(geral * 0.96);
-                mira4x = Math.floor(geral * 0.93);
-                botao = Math.floor(Math.random() * (52 - 46 + 1)) + 46 + "%";
-                ponteiro = "7 / 10";
-                atraso = "Curto (0.5s)";
-            }
-            else if (input.includes('SAMSUNG') || input.includes('GALAXY')) {
-                dpi = Math.floor(Math.random() * (780 - 640 + 1)) + 640; 
-                geral = 200; 
-                mira2x = 196;
-                mira4x = 192;
-                botao = Math.floor(Math.random() * (48 - 43 + 1)) + 43 + "%";
-                ponteiro = "9 / 10";
-                atraso = "Curto (0.5s)";
-            }
-            else if (input.includes('XIAOMI') || input.includes('POCO') || input.includes('REDMI')) {
-                dpi = Math.floor(Math.random() * (890 - 720 + 1)) + 720; 
-                geral = Math.floor(Math.random() * (198 - 185 + 1)) + 185;
-                mira2x = Math.floor(geral * 0.97);
-                mira4x = Math.floor(geral * 0.94);
-                botao = Math.floor(Math.random() * (50 - 44 + 1)) + 44 + "%";
-                ponteiro = "8 / 10";
-                atraso = "Curto (0.5s)";
-            }
-            else if (input.includes('MOTOROLA') || input.includes('MOTO')) {
-                dpi = Math.floor(Math.random() * (680 - 580 + 1)) + 580;
-                geral = 198;
-                mira2x = 194;
-                mira4x = 190;
-                botao = Math.floor(Math.random() * (53 - 47 + 1)) + 47 + "%";
-                ponteiro = "10 / 10";
-                atraso = "Curto (0.5s)";
-            }
-            else {
-                dpi = Math.floor(Math.random() * (650 - 500 + 1)) + 500;
-                geral = Math.floor(Math.random() * (195 - 175 + 1)) + 175;
-                mira2x = Math.floor(geral * 0.95);
-                mira4x = Math.floor(geral * 0.92);
-                botao = Math.floor(Math.random() * (50 - 45 + 1)) + 45 + "%";
-                ponteiro = "8 / 10";
+            } else {
+                // Sorteia uma DPI bem variada para Android entre 410 e 960 (ex: 748)
+                dpi = Math.floor(Math.random() * (960 - 410 + 1)) + 410;
+                
+                // CÁLCULO PROPORCIONAL: Quanto maior a DPI, mais ajustada fica a Geral para não pinar
+                // Isso permite que o valor varie de 0 a 200 dependendo da DPI gerada!
+                let fatorBase = (960 - dpi) / 550; // Gera um multiplicador dinâmico
+                geral = Math.floor(100 + (fatorBase * 90)); 
+                
+                // Adiciona uma pequena variação para dar aleatoriedade e calibração fina
+                geral += Math.floor(Math.random() * (15 - (-15) + 1)) - 15;
+                
+                // Proteção para manter rigorosamente dentro do limite de 0 a 200
+                if (geral > 200) geral = 200;
+                if (geral < 40) geral = 85; 
+
+                ponteiro = Math.floor(Math.random() * (10 - 6 + 1)) + 6 + " / 10";
                 atraso = "Curto (0.5s)";
             }
 
+            // Calibração proporcional e matemática para as miras secundárias baseadas na Geral
+            mira2x = Math.floor(geral * 0.94);
+            mira4x = Math.floor(geral * 0.89);
+            botao = Math.floor(Math.random() * (56 - 42 + 1)) + 42 + "%";
+
+            // Garante que as sub-miras não estourem o limite
             if (mira2x > 200) mira2x = 200;
             if (mira4x > 200) mira4x = 200;
 
             document.getElementById('res-modelo').innerText = "Configurações para: " + input;
             document.getElementById('res-dpi').innerText = dpi;
-            document.getElementById('res-ponteiro').innerText = pointer = ponteiro;
+            document.getElementById('res-ponteiro').innerText = ponteiro;
             document.getElementById('res-atraso').innerText = atraso;
             document.getElementById('res-geral').innerText = geral;
             document.getElementById('res-2x').innerText = mira2x;
@@ -452,7 +429,6 @@
                 return;
             }
 
-            // Lista estendida com mais estilos de nicks impressionantes
             const estilos = [
                 `꧁⚔️ ${base} ⚔️꧂`,
                 `ㅤ${base} ⚡`,
@@ -490,4 +466,4 @@
         }
     </script>
 </body>
-    </html>
+</html>
