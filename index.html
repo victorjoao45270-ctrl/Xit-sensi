@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Sensi Dinâmico</title>
+    <title>Portal Avançado FF - Sensi & Ferramentas</title>
     <style>
         * {
             margin: 0;
@@ -28,7 +28,7 @@
             padding: 25px 10px;
             background: linear-gradient(135deg, #718093 0%, #2f3640 100%);
             border-radius: 12px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             border-bottom: 3px solid #00cec9;
         }
@@ -45,22 +45,59 @@
             margin-top: 5px;
         }
 
-        .search-box {
+        /* Menu de abas */
+        .nav-tabs {
+            display: flex;
+            justify-content: space-between;
+            background-color: #1a1a1e;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            gap: 5px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 5px;
+            background: none;
+            border: none;
+            color: #dcdde1;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            text-transform: uppercase;
+            transition: 0.2s;
+            text-align: center;
+        }
+
+        .tab-btn.active {
+            background-color: #00cec9;
+            color: #121214;
+        }
+
+        /* Caixas de Conteúdo */
+        .app-box {
             background-color: #1a1a1e;
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 25px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: none;
         }
 
-        .search-box label {
+        .app-box.active {
+            display: block;
+        }
+
+        label {
             display: block;
             margin-bottom: 10px;
             color: #00cec9;
             font-weight: bold;
         }
 
-        .search-box input {
+        input, select {
             width: 100%;
             padding: 12px;
             border-radius: 6px;
@@ -71,12 +108,12 @@
             margin-bottom: 15px;
         }
 
-        .search-box input:focus {
+        input:focus, select:focus {
             outline: none;
             border-color: #00cec9;
         }
 
-        .search-box button {
+        button.main-btn {
             width: 100%;
             padding: 12px;
             background-color: #00cec9;
@@ -90,11 +127,12 @@
             transition: 0.2s;
         }
 
-        .search-box button:hover {
+        button.main-btn:hover {
             background-color: #00b894;
             color: #fff;
         }
 
+        /* Estilo de Resultados */
         .result-box {
             background-color: #1a1a1e;
             padding: 20px;
@@ -114,11 +152,6 @@
             cursor: pointer;
             margin-bottom: 15px;
             text-transform: uppercase;
-            transition: 0.2s;
-        }
-
-        .btn-voltar:hover {
-            color: #fff;
         }
 
         .result-box h3 {
@@ -137,7 +170,6 @@
             padding-bottom: 5px;
         }
 
-        /* AJUSTE AQUI: Mantém os textos 100% alinhados nas pontas */
         .result-item {
             display: flex;
             justify-content: space-between;
@@ -151,43 +183,145 @@
         .result-item span {
             font-weight: bold;
             color: #ffffff;
-            text-align: right;
+        }
+
+        /* Lista de nicks e dicas */
+        .nick-list {
+            margin-top: 15px;
+        }
+        .nick-item {
+            background-color: #121214;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #29292e;
+        }
+        .btn-copy {
+            background-color: #ff9f43;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: #121214;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .dica-card {
+            background-color: #121214;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 3px solid #00cec9;
+        }
+        .dica-card h4 {
+            color: #00cec9;
+            margin-bottom: 5px;
+        }
+        .dica-card p {
+            font-size: 0.95rem;
+            color: #dcdde1;
+            line-height: 1.4;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <header id="menu-header">
-            <h1>Gerador Avançado FF</h1>
-            <p>Configurações completas (Jogo + Sistema do Celular)</p>
+        <header>
+            <h1>Portal Pro FF</h1>
+            <p>Sensi, Ferramentas e Dicas Avançadas</p>
         </header>
 
-        <div id="painel-busca" class="search-box">
-            <label for="celular">Digite a Marca ou Modelo:</label>
-            <input type="text" id="celular" placeholder="Ex: Moto G60, Samsung S23, iPhone 13...">
-            <button onclick="gerarConfiguracaoDinamica()">Gerar Sensi e DPI</button>
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('tab-sensi')">Sensi</button>
+            <button class="tab-btn" onclick="switchTab('tab-hs')">Taxa HS</button>
+            <button class="tab-btn" onclick="switchTab('tab-nicks')">Nicks</button>
+            <button class="tab-btn" onclick="switchTab('tab-dicas')">Treino</button>
         </div>
 
-        <div id="resultado" class="result-box">
-            <button class="btn-voltar" onclick="voltarMenu()">← Voltar</button>
-            
-            <h3 id="res-modelo">Buscando...</h3>
+        <div id="tab-sensi" class="app-box active">
+            <div id="painel-busca">
+                <label for="celular">Digite a Marca ou Modelo:</label>
+                <input type="text" id="celular" placeholder="Ex: Moto G60, Samsung S23, iPhone 13...">
+                <button class="main-btn" onclick="gerarConfiguracaoDinamica()">Gerar Sensi e DPI</button>
+            </div>
 
-            <div class="section-title">Configurações do Celular (Sistema)</div>
-            <div class="result-item">DPI do Sistema: <span id="res-dpi" style="color: #ff9f43;">-</span></div>
-            <div class="result-item">Velocidade do Ponteiro: <span id="res-ponteiro">-</span></div>
-            <div class="result-item">Atraso ao Tocar e Pressionar: <span id="res-atraso">-</span></div>
+            <div id="resultado" class="result-box">
+                <button class="btn-voltar" onclick="voltarMenu()">← Voltar</button>
+                <h3 id="res-modelo">Buscando...</h3>
+
+                <div class="section-title">Configurações do Celular (Sistema)</div>
+                <div class="result-item">DPI do Sistema: <span id="res-dpi" style="color: #ff9f43;">-</span></div>
+                <div class="result-item">Velocidade do Ponteiro: <span id="res-ponteiro">-</span></div>
+                <div class="result-item">Atraso ao Tocar e Pressionar: <span id="res-atraso">-</span></div>
+                
+                <div class="section-title">Sensibilidade In-Game (Free Fire)</div>
+                <div class="result-item">Geral: <span id="res-geral" style="color: #00cec9;">-</span></div>
+                <div class="result-item">Mira 2x: <span id="res-2x">-</span></div>
+                <div class="result-item">Mira 4x: <span id="res-4x">-</span></div>
+                <div class="result-item">Botão de Atirar: <span id="res-botao" style="color: #ff6b6b;">-</span></div>
+            </div>
+        </div>
+
+        <div id="tab-hs" class="app-box">
+            <label for="abates">Total de Abates (Kills):</label>
+            <input type="number" id="abates" placeholder="Ex: 150">
             
-            <div class="section-title">Sensibilidade In-Game (Free Fire)</div>
-            <div class="result-item">Geral: <span id="res-geral" style="color: #00cec9;">-</span></div>
-            <div class="result-item">Mira 2x: <span id="res-2x">-</span></div>
-            <div class="result-item">Mira 4x: <span id="res-4x">-</span></div>
-            <div class="result-item">Botão de Atirar: <span id="res-botao" style="color: #ff6b6b;">-</span></div>
+            <label for="capas">Abates por Headshot (Capa):</label>
+            <input type="number" id="capas" placeholder="Ex: 75">
+            
+            <button class="main-btn" onclick="calcularTaxaHS()">Calcular Taxa %</button>
+
+            <div id="res-hs-box" class="result-box" style="margin-top: 20px;">
+                <h3>Sua Taxa de HS</h3>
+                <div class="result-item">Porcentagem: <span id="res-porcentagem" style="color: #00cec9; font-size: 1.5rem;">0%</span></div>
+                <div class="result-item">Status: <span id="res-status">-</span></div>
+            </div>
+        </div>
+
+        <div id="tab-nicks" class="app-box">
+            <label for="nome-nick">Digite seu Nome/Apelido:</label>
+            <input type="text" id="nome-nick" placeholder="Ex: Nobru, Cerol...">
+            <button class="main-btn" onclick="gerarNicks()">Gerar Estilos</button>
+
+            <div id="lista-nicks" class="nick-list"></div>
+        </div>
+
+        <div id="tab-dicas" class="app-box">
+            <h3 style="color: #ff9f43; margin-bottom: 15px; text-transform: uppercase;">Segredos do Capa</h3>
+            
+            <div class="dica-card">
+                <h4>1. O Puxado em "J"</h4>
+                <p>Para oponentes correndo de lado, não puxe reto para cima. Desça levemente o botão de atirar e suba fazendo um arco em formato da letra J na direção que o inimigo está correndo.</p>
+            </div>
+
+            <div class="dica-card">
+                <h4>2. Posicionamento da Mira Branca</h4>
+                <p>Mantenha sempre a sua mira branca na altura do peito/ombro do boneco antes de atirar. Se correr olhando para o chão, o tempo de arrastar até a cabeça dobra e você perde a trocação.</p>
+            </div>
+
+            <div class="dica-card">
+                <h4>3. Ritmo de Disparo (Armas AR)</h4>
+                <p>Com armas como Scar ou AK, não segure o dedo direto. Dispare rajadas de 3 a 4 tiros, pare por meio segundo e dispare de novo. Isso evita que a mira abra e os tiros espalhem.</p>
+            </div>
         </div>
     </div>
 
     <script>
+        // Função para alternar as abas do menu
+        function switchTab(tabId) {
+            document.querySelectorAll('.app-box').forEach(box => box.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // LÓGICA DA SENSI (Mantida exatamente como estava)
         function gerarConfiguracaoDinamica() {
             const input = document.getElementById('celular').value.trim().toUpperCase();
             const resultadoDiv = document.getElementById('resultado');
@@ -202,7 +336,7 @@
             const marcaValidaEncontrada = marcasValidas.some(marca => input.includes(marca));
 
             if (!marcaValidaEncontrada) {
-                alert("Celular não reconhecido! Digite uma marca válida (Ex: Samsung, Motorola, Xiaomi, iPhone, Realme...)");
+                alert("Celular não reconhecido! Digite uma marca válida (Ex: Samsung, Motorola, Xiaomi, iPhone...)");
                 return;
             }
 
@@ -219,15 +353,11 @@
             } else {
                 dpi = Math.floor(Math.random() * (960 - 410 + 1)) + 410;
                 geral = Math.floor(Math.random() * (200 - 105 + 1)) + 105; 
-                
                 mira2x = Math.floor(geral * 0.95);
                 if (mira2x > 200) mira2x = 200;
-                
                 mira4x = Math.floor(geral * 0.90);
                 if (mira4x > 200) mira4x = 200;
-
                 botao = Math.floor(Math.random() * (60 - 40 + 1)) + 40 + "%";
-                
                 const barrasPonteiro = Math.floor(Math.random() * (10 - 8 + 1)) + 8;
                 ponteiro = barrasPonteiro + " / 10";
                 atraso = "Curto (0.5s)";
@@ -251,7 +381,71 @@
             document.getElementById('painel-busca').style.display = 'block';
             document.getElementById('celular').value = "";
         }
-    </script>
 
+        // LÓGICA DA CALCULADORA DE HS
+        function calcularTaxaHS() {
+            const abates = parseFloat(document.getElementById('abates').value);
+            const capas = parseFloat(document.getElementById('capas').value);
+            const resBox = document.getElementById('res-hs-box');
+
+            if (isNaN(abates) || isNaN(capas) || abates <= 0) {
+                alert("Por favor, preencha valores válidos!");
+                return;
+            }
+
+            if (capas > abates) {
+                alert("O número de capas não pode ser maior que o total de abates!");
+                return;
+            }
+
+            const taxa = ((capas / abates) * 100).toFixed(1);
+            document.getElementById('res-porcentagem').innerText = taxa + "%";
+
+            let status = "";
+            if (taxa < 35) status = "Pode melhorar! Treine a puxada.";
+            else if (taxa < 55) status = "Sensi boa! Jogador equilibrado.";
+            else if (taxa < 75) status = "Monstro! Nível competitivo.";
+            else status = "Xiter legítimo! Taxa absurda.";
+
+            document.getElementById('res-status').innerText = status;
+            resBox.style.display = 'block';
+        }
+
+        // LÓGICA DO GERADOR DE NICKS
+        function gerarNicks() {
+            const base = document.getElementById('nome-nick').value.trim();
+            if (base === "") {
+                alert("Digite um nome primeiro!");
+                return;
+            }
+
+            const estilos = [
+                `꧁⚔️ ${base} ⚔️꧂`,
+                `ㅤ${base} ⚡`,
+                `🎯 ${base}•fx`,
+                `☯️ 🅝🅞🅑🅡🅤_${base}`,
+                `亗 ${base} 亗`,
+                `꧁☠️ ${base} ☠️꧂`
+            ];
+
+            const container = document.getElementById('lista-nicks');
+            container.innerHTML = "";
+
+            estilos.forEach(nick => {
+                const item = document.createElement('div');
+                item.className = 'nick-item';
+                item.innerHTML = `
+                    <span>${nick}</span>
+                    <button class="btn-copy" onclick="copiarTexto('${nick}')">Copiar</button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function copiarTexto(texto) {
+            navigator.clipboard.writeText(texto);
+            alert("Nick copiado para a área de transferência!");
+        }
+    </script>
 </body>
 </html>
