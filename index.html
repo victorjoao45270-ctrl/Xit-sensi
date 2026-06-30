@@ -3,252 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador Pro - Sensi & HUDs</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #0f0f12;
-            color: #f1f2f6;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            padding: 30px 15px;
-            background: linear-gradient(135deg, #2c3e50, #1a252f);
-            border-radius: 14px;
-            margin-bottom: 25px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-            border-bottom: 4px solid #00f5d4;
-        }
-
-        header h1 {
-            font-size: 2rem;
-            text-transform: uppercase;
-            color: #00f5d4;
-            letter-spacing: 1.5px;
-        }
-
-        header p {
-            color: #a4b0be;
-            margin-top: 8px;
-            font-size: 0.95rem;
-        }
-
-        .nav-tabs {
-            display: flex;
-            background-color: #1e1e24;
-            padding: 6px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            gap: 6px;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 12px 5px;
-            background: none;
-            border: none;
-            color: #ced6e0;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 8px;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .tab-btn.active {
-            background-color: #00f5d4;
-            color: #0f0f12;
-            box-shadow: 0 4px 10px rgba(0,245,212,0.3);
-        }
-
-        .app-box {
-            background-color: #1e1e24;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-            display: none;
-        }
-
-        .app-box.active {
-            display: block;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 12px;
-            color: #00f5d4;
-            font-weight: 600;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 14px;
-            border-radius: 8px;
-            border: 2px solid #2f3542;
-            background-color: #121216;
-            color: #fff;
-            font-size: 1rem;
-            margin-bottom: 20px;
-            transition: border-color 0.2s;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: #00f5d4;
-        }
-
-        button.main-btn {
-            width: 100%;
-            padding: 14px;
-            background-color: #00f5d4;
-            border: none;
-            border-radius: 8px;
-            color: #0f0f12;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: all 0.2s ease;
-        }
-
-        button.main-btn:hover {
-            background-color: #00b894;
-            color: #fff;
-            box-shadow: 0 4px 12px rgba(0, 184, 148, 0.4);
-        }
-
-        .result-box {
-            background-color: #121216;
-            padding: 22px;
-            border-radius: 10px;
-            display: none;
-            border-left: 5px solid #ff9f43;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
-            margin-top: 5px;
-        }
-
-        .btn-voltar {
-            display: inline-block;
-            background: none;
-            border: none;
-            color: #ff9f43;
-            font-size: 0.95rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 18px;
-            text-transform: uppercase;
-        }
-
-        .result-box h3 {
-            color: #ff9f43;
-            margin-bottom: 18px;
-            text-transform: uppercase;
-            font-size: 1.2rem;
-            letter-spacing: 0.5px;
-        }
-
-        .section-title {
-            color: #00f5d4;
-            font-size: 0.9rem;
-            margin: 22px 0 12px 0;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            border-bottom: 1px dashed #2f3542;
-            padding-bottom: 6px;
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            font-size: 1.05rem;
-            border-bottom: 1px solid #1e1e24;
-            padding-bottom: 10px;
-        }
-
-        .result-item span {
-            font-weight: bold;
-            color: #ffffff;
-        }
-
-        .nick-list {
-            margin-top: 15px;
-        }
-        .nick-item {
-            background-color: #121216;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #2f3542;
-        }
-        .btn-copy {
-            background-color: #ff9f43;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            color: #0f0f12;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: background 0.2s;
-        }
-        .btn-copy:hover {
-            background-color: #e67e22;
-        }
-
-        .dica-card {
-            background-color: #121216;
-            padding: 18px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border-left: 4px solid #00f5d4;
-        }
-        .dica-card h4 {
-            color: #00f5d4;
-            margin-bottom: 6px;
-            font-size: 1.05rem;
-        }
-        .dica-card p {
-            font-size: 0.95rem;
-            color: #ced6e0;
-            line-height: 1.5;
-        }
-    </style>
+    <title>Portal Pro FF</title>
+    <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
 
     <div class="container">
         <header>
             <h1>Portal Pro FF</h1>
-            <p>Gerador Inteligente de Sensibilidade, Layouts e Ferramentas</p>
+            <p>Gerador Inteligente de Sensibilidade, Desempenho e Nicks</p>
         </header>
 
         <div class="nav-tabs">
             <button class="tab-btn active" onclick="trocarAba('tab-sensi', this)">Sensi</button>
-            <button class="tab-btn" onclick="trocarAba('tab-hud', this)">HUDs</button>
             <button class="tab-btn" onclick="trocarAba('tab-hs', this)">Taxa HS</button>
             <button class="tab-btn" onclick="trocarAba('tab-nicks', this)">Nicks</button>
             <button class="tab-btn" onclick="trocarAba('tab-dicas', this)">Treino</button>
@@ -278,28 +45,6 @@
             </div>
         </div>
 
-        <div id="tab-hud" class="app-box">
-            <label for="select-dedos">Selecione o Estilo do Layout:</label>
-            <select id="select-dedos">
-                <option value="2">HUD 2 Dedos (Clássico / Rápido)</option>
-                <option value="3">HUD 3 Dedos (Movimentação Avançada)</option>
-                <option value="4">HUD 4 Dedos (Competitivo / LBFF)</option>
-                <option value="5">HUD 5 Dedos (Visor Amplo / Tablet)</option>
-                <option value="6">HUD 6 Dedos (Instaplayer Extremo)</option>
-            </select>
-            <button class="main-btn" onclick="construirHudVariavel()">Gerar Novo Layout</button>
-
-            <div id="resultado-hud" class="result-box" style="margin-top: 20px;">
-                <h3 id="hud-titulo">HUD customizado</h3>
-                <div class="result-item">Tamanho do Botão de Atirar: <span id="hud-botao-tam" style="color: #ff4757;">-</span></div>
-                <div class="result-item">Transparência indicada: <span id="hud-transp">-</span></div>
-                <div class="result-item" style="display: block; font-size: 0.95rem; line-height: 1.5; color: #ced6e0; padding-top: 12px;">
-                    <strong>Mapeamento dos Botões Chave:</strong><br><br>
-                    <span id="hud-mapa-desc">-</span>
-                </div>
-            </div>
-        </div>
-
         <div id="tab-hs" class="app-box">
             <label for="abates">Total de Abates Registrados:</label>
             <input type="number" id="abates" placeholder="Ex: 240">
@@ -326,194 +71,13 @@
 
         <div id="tab-dicas" class="app-box">
             <h3 style="color: #ff9f43; margin-bottom: 18px; text-transform: uppercase;">Treinamento Avançado</h3>
-            
             <div class="dica-card">
                 <h4>Arraste em formato "J"</h4>
-                <p>Útil contra alvos em movimento lateral. Em vez de arrastar o botão reto para cima, faça um movimento de meia-lua contornando o posicionamento da cabeça do inimigo.</p>
+                <p>Útil contra alvos em movimento lateral. Faça um movimento de meia-lua contornando o posicionamento da cabeça do inimigo.</p>
             </div>
-
             <div class="dica-card">
                 <h4>Alinhamento de Mira Estática</h4>
-                <p>Mantenha o retículo branco sempre centralizado na altura do peito do oponente fictício. Evite andar olhando para baixo para diminuir o tempo de reação ao disparar.</p>
-            </div>
-
-            <div class="dica-card">
-                <h4>Cadência com Armas Automáticas</h4>
-                <p>Não pressione o botão de disparo de forma contínua com fuzis de assalto a longa distância. Use rajadas controladas de 3 disparos para que o recuo da arma não abra a mira.</p>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Gerenciador de Abas Limpo
-        function trocarAba(abaId, botaoAtivo) {
-            document.querySelectorAll('.app-box').forEach(box => box.style.display = 'none');
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            
-            document.getElementById(abaId).style.display = 'block';
-            if (botaoAtivo) {
-                botaoAtivo.classList.add('active');
-            }
-        }
-
-        // Lógica de Sensibilidade Calibrada com Variação Real de 0 a 200
-        function calcularSensiDinamica() {
-            const inputVal = document.getElementById('celular').value.trim().toUpperCase();
-            const resultadoSensi = document.getElementById('resultado-sensi');
-            const painelBusca = document.getElementById('painel-busca');
-            
-            if (inputVal === "") {
-                alert("Por favor, digite o modelo do aparelho!");
-                return;
-            }
-
-            const tagsDispositivos = ['SAMSUNG', 'MOTOROLA', 'MOTO', 'XIAOMI', 'POCO', 'REDMI', 'IPHONE', 'APPLE', 'IPAD', 'INFINIX', 'REALME', 'ASUS', 'VIVO', 'LG', 'GALAXY'];
-            const modeloValido = tagsDispositivos.some(tag => inputVal.includes(tag));
-
-            if (!modeloValido) {
-                alert("Aparelho não identificado. Certifique-se de incluir a marca correta.");
-                return;
-            }
-
-            let valorDpi, valGeral, val2x, val4x, tamBotao, ponteiroVel, atrasoToque;
-
-            if (inputVal.includes('IPHONE') || inputVal.includes('APPLE') || inputVal.includes('IPAD')) {
-                valorDpi = "Padrão Sistema iOS (120 Mv)";
-                // Escala ampla variando de forma calibrada para as telas sensíveis da Apple
-                valGeral = Math.floor(Math.random() * (185 - 105 + 1)) + 105; 
-                ponteiroVel = "Máxima";
-                atrasoToque = "0.25s";
-            } else {
-                // Sorteia uma DPI altamente variável (Ex: se der 748, ajustará proporcionalmente a Geral)
-                const dpiSorteada = Math.floor(Math.random() * (960 - 410 + 1)) + 410;
-                valorDpi = dpiSorteada;
-                
-                // Cálculo proporcional: maior DPI gera uma compensação dinâmica na Sensi geral
-                let baseProporcional = (960 - dpiSorteada) / 550;
-                valGeral = Math.floor(95 + (baseProporcional * 95));
-                
-                // Aplica uma variação fina que roda de forma fluida de 0 a 200
-                valGeral += Math.floor(Math.random() * (16 - (-16) + 1)) - 16;
-                
-                if (valGeral > 200) valGeral = 200;
-                if (valGeral < 35) valGeral = 90; 
-
-                ponteiroVel = Math.floor(Math.random() * (10 - 6 + 1)) + 6 + " / 10";
-                atrasoToque = "Curto (0.5s)";
-            }
-
-            val2x = Math.floor(valGeral * 0.93);
-            val4x = Math.floor(valGeral * 0.87);
-            tamBotao = Math.floor(Math.random() * (55 - 41 + 1)) + 41 + "%";
-
-            if (val2x > 200) val2x = 200;
-            if (val4x > 200) val4x = 200;
-
-            document.getElementById('res-modelo').innerText = "Layout Definido para: " + inputVal;
-            document.getElementById('res-dpi').innerText = valorDpi;
-            document.getElementById('res-ponteiro').innerText = ponteiroVel;
-            document.getElementById('res-atraso').innerText = atrasoToque;
-            document.getElementById('res-geral').innerText = valGeral;
-            document.getElementById('res-2x').innerText = val2x;
-            document.getElementById('res-4x').innerText = val4x;
-            document.getElementById('res-botao').innerText = tamBotao;
-
-            painelBusca.style.display = 'none';
-            resultadoSensi.style.display = 'block';
-        }
-
-        function resetarMenuSensi() {
-            document.getElementById('resultado-sensi').style.display = 'none';
-            document.getElementById('painel-busca').style.display = 'block';
-            document.getElementById('celular').value = "";
-        }
-
-        // Lógica Avançada de HUDs Independentes e Variáveis a cada clique
-        function construirHudVariavel() {
-            const categoriaDedos = document.getElementById('select-dedos').value;
-            const painelHud = document.getElementById('resultado-hud');
-            
-            const randomBtnTamanho = Math.floor(Math.random() * (60 - 38 + 1)) + 38 + "%";
-            const randomOpa = Math.floor(Math.random() * (65 - 20 + 1)) + 20 + "%";
-
-            // Listas de posições alternativas para criar variação real a cada geração
-            const opcoesPulo = ["Canto superior direito (ao lado do mapa)", "Setor inferior direito (tradicional)", "Topo superior esquerdo da tela"];
-            const opcoesAgachado = ["Canto inferior esquerdo (próximo ao analógico)", "Canto inferior direito (abaixo do pulo)", "Borda superior esquerda"];
-            const opcoesGeloDeDefesa = ["Canto esquerdo em tamanho ampliado (100%)", "Topo central-esquerdo", "Região intermediária esquerda"];
-
-            const localPulo = opcoesPulo[Math.floor(Math.random() * opcoesPulo.length)];
-            const localAgachado = opcoesAgachado[Math.floor(Math.random() * opcoesAgachado.length)];
-            const localGelo = opcoesGeloDeDefesa[Math.floor(Math.random() * opcoesGeloDeDefesa.length)];
-
-            let stringTitulo = "";
-            let stringConteudo = "";
-
-            if (categoriaDedos === "2") {
-                stringTitulo = "Layout Otimizado - 2 Dedos";
-                stringConteudo = `• <strong>Botão de Disparo:</strong> Inferior Direito clássico.<br>` +
-                                 `• <strong>Botão de Pulo:</strong> ${localPulo === "Topo superior esquerdo da tela" ? "Setor inferior direito" : localPulo}.<br>` +
-                                 `• <strong>Botão de Agachamento:</strong> ${localAgachado}.<br>` +
-                                 `• <strong>Parede de Gelo:</strong> Canto inferior esquerdo padrão rápido.<br>` +
-                                 `• <em>Foco: Ideal para máxima estabilidade em telas menores e mira firme.</em>`;
-            } 
-            else if (categoriaDedos === "3") {
-                stringTitulo = "Layout Dinâmico - 3 Dedos";
-                stringConteudo = `• <strong>Botão de Disparo:</strong> Inferior Direito posicionado para puxadas longas.<br>` +
-                                 `• <strong>Ação de Pulo / Troca Rápida:</strong> Configurado no ${localPulo} acionado com o dedo indicador esquerdo.<br>` +
-                                 `• <strong>Botão de Agachamento:</strong> Canto inferior esquerdo.<br>` +
-                                 `• <strong>Parede de Gelo:</strong> ${localGelo}.<br>` +
-                                 `• <em>Foco: Agilidade no gatilho de troca de arma instantânea após o disparo.</em>`;
-            } 
-            else if (categoriaDedos === "4") {
-                stringTitulo = "Layout Avançado / Competitivo - 4 Dedos";
-                stringConteudo = `• <strong>Mira Ativa:</strong> Topo superior direito (Mapeado para indicador direito).<br>` +
-                                 `• <strong>Mapeamento de Pulo:</strong> Topo superior esquerdo (Mapeado para indicador esquerdo).<br>` +
-                                 `• <strong>Botão de Agachamento:</strong> ${localAgachado}.<br>` +
-                                 `• <strong>Parede de Gelo:</strong> ${localGelo} com escala em 100%.<br>` +
-                                 `• <em>Foco: Execução de ações complexas (mirar, pular e atirar) em frações de segundo.</em>`;
-            }
-            else if (categoriaDedos === "5") {
-                stringTitulo = "Layout de Alta Performance - 5 Dedos";
-                stringConteudo = `• <strong>Mão Esquerda:</strong> Dedão no analógico de corrida, Indicador no agachamento e Delo         <div id="tab-hs" class="app-box">
-            <label for="abates">Total de Abates Registrados:</label>
-            <input type="number" id="abates" placeholder="Ex: 240">
-            
-            <label for="capas">Abates por Headshot (Capa):</label>
-            <input type="number" id="capas" placeholder="Ex: 120">
-            
-            <button class="main-btn" onclick="calcularPorcentagemHS()">Calcular Desempenho</button>
-
-            <div id="resultado-hs" class="result-box" style="margin-top: 20px;">
-                <h3>Resultado da Análise</h3>
-                <div class="result-item">Taxa de HS: <span id="res-porcentagem" style="color: #00f5d4; font-size: 1.4rem;">0%</span></div>
-                <div class="result-item">Classificação: <span id="res-status">-</span></div>
-            </div>
-        </div>
-
-        <div id="tab-nicks" class="app-box">
-            <label for="nome-nick">Nome Base para Modificar:</label>
-            <input type="text" id="nome-nick" placeholder="Ex: Apelido">
-            <button class="main-btn" onclick="gerarEstilosDeNick()">Gerar Combinações</button>
-
-            <div id="lista-nicks" class="nick-list"></div>
-        </div>
-
-        <div id="tab-dicas" class="app-box">
-            <h3 style="color: #ff9f43; margin-bottom: 18px; text-transform: uppercase;">Treinamento Avançado</h3>
-            
-            <div class="dica-card">
-                <h4>Arraste em formato "J"</h4>
-                <p>Útil contra alvos em movimento lateral. Em vez de arrastar o botão reto para cima, faça um movimento de meia-lua contornando o posicionamento da cabeça do inimigo.</p>
-            </div>
-
-            <div class="dica-card">
-                <h4>Alinhamento de Mira Estática</h4>
-                <p>Mantenha o retículo branco sempre centralizado na altura do peito do oponente fictício. Evite andar olhando para baixo para diminuir o tempo de reação ao disparar.</p>
-            </div>
-
-            <div class="dica-card">
-                <h4>Cadência com Armas Automáticas</h4>
-                <p>Não pressione o botão de disparo de forma contínua com fuzis de assalto a longa distância. Use rajadas controladas de 3 disparos para que o recuo da arma não abra a mira.</p>
+                <p>Mantenha o retículo branco sempre centralizado na altura do peito. Evite andar olhando para baixo.</p>
             </div>
         </div>
     </div>
@@ -593,71 +157,6 @@
             document.getElementById('resultado-sensi').style.display = 'none';
             document.getElementById('painel-busca').style.display = 'block';
             document.getElementById('celular').value = "";
-        }
-
-        function construirHudVariavel() {
-            const categoriaDedos = document.getElementById('select-dedos').value;
-            const painelHud = document.getElementById('resultado-hud');
-            
-            const randomBtnTamanho = Math.floor(Math.random() * (60 - 38 + 1)) + 38 + "%";
-            const randomOpa = Math.floor(Math.random() * (65 - 20 + 1)) + 20 + "%";
-
-            const opcoesPulo = ["Canto superior direito (ao lado do mapa)", "Setor inferior direito (tradicional)", "Topo superior esquerdo da tela"];
-            const opcoesAgachado = ["Canto inferior esquerdo (próximo ao analógico)", "Canto inferior direito (abaixo do pulo)", "Borda superior esquerda"];
-            const opcoesGeloDeDefesa = ["Canto esquerdo em tamanho ampliado (100%)", "Topo central-esquerdo", "Região intermediária esquerda"];
-
-            const localPulo = opcoesPulo[Math.floor(Math.random() * opcoesPulo.length)];
-            const localAgachado = opcoesAgachado[Math.floor(Math.random() * opcoesAgachado.length)];
-            const localGelo = opcoesGeloDeDefesa[Math.floor(Math.random() * opcoesGeloDeDefesa.length)];
-
-            let stringTitulo = "";
-            let stringConteudo = "";
-
-            if (categoriaDedos === "2") {
-                stringTitulo = "Layout Otimizado - 2 Dedos";
-                stringConteudo = `• <strong>Botão de Disparo:</strong> Inferior Direito clássico.<br>` +
-                                 `• <strong>Botão de Pulo:</strong> ${localPulo === "Topo superior esquerdo da tela" ? "Setor inferior direito" : localPulo}.<br>` +
-                                 `• <strong>Botão de Agachamento:</strong> ${localAgachado}.<br>` +
-                                 `• <strong>Parede de Gelo:</strong> Canto inferior esquerdo padrão rápido.<br>` +
-                                 `• <em>Foco: Ideal para máxima estabilidade em telas menores e mira firme.</em>`;
-            } 
-            else if (categoriaDedos === "3") {
-                stringTitulo = "Layout Dinâmico - 3 Dedos";
-                stringConteudo = `• <strong>Botão de Disparo:</strong> Inferior Direito posicionado para puxadas longas.<br>` +
-                                 `• <strong>Ação de Pulo / Troca Rápida:</strong> Configurado no ${localPulo} acionado com o dedo indicador esquerdo.<br>` +
-                                 `• <strong>Botão de Agachamento:</strong> Canto inferior esquerdo.<br>` +
-                                 `• <strong>Parede de Gelo:</strong> ${localGelo}.<br>` +
-                                 `• <em>Foco: Agilidade no gatilho de troca de arma instantânea após o disparo.</em>`;
-            } 
-            else if (categoriaDedos === "4") {
-                stringTitulo = "Layout Avançado / Competitivo - 4 Dedos";
-                stringConteudo = `• <strong>Mira Ativa:</strong> Topo superior direito (Mapeado para indicador direito).<br>` +
-                                 `• <strong>Mapeamento de Pulo:</strong> Topo superior esquerdo (Mapeado para indicador esquerdo).<br>` +
-                                 `• <strong>Botão de Agachamento:</strong> ${localAgachado}.<br>` +
-                                 `• <strong>Parede de Gelo:</strong> ${localGelo} com escala em 100%.<br>` +
-                                 `• <em>Foco: Execução de ações complexas (mirar, pular e atirar) em frações de segundo.</em>`;
-            }
-            else if (categoriaDedos === "5") {
-                stringTitulo = "Layout de Alta Performance - 5 Dedos";
-                stringConteudo = `• <strong>Mão Esquerda:</strong> Dedão no analógico de corrida, Indicador no agachamento e Delo Médio mapeado para Gelo Rápido.<br>` +
-                                 `• <strong>Mão Direita:</strong> Dedão focado em controle de sensibilidade lateral, Indicador acionando pulos estratégicos.<br>` +
-                                 `• <strong>Parede de Gelo:</strong> ${localGelo}.<br>` +
-                                 `• <em>Foco: Perfeito para Tablets, iPads ou celulares com telas estendidas.</em>`;
-            }
-            else if (categoriaDedos === "6") {
-                stringTitulo = "Layout Extremo / InstaPlayer - 6 Dedos";
-                stringConteudo = `• <strong>Mapeamento Geral:</strong> Três dedos em atividade constante em cada extremidade do dispositivo.<br>` +
-                                 `• <strong>Gatilhos Superiores:</strong> Botões de mirar, pular, agachar e trocar de armas realocados para o topo do display.<br>` +
-                                 `• <strong>Gatilho de Disparo Secundário:</strong> Habilitado na esquerda superior para disparos rápidos sem travar movimentação.<br>` +
-                                 `• <em>Foco: Tempo de resposta mecânica máxima, recomendado para telas largas.</em>`;
-            }
-
-            document.getElementById('hud-titulo').innerText = stringTitulo;
-            document.getElementById('hud-botao-tam').innerText = randomBtnTamanho;
-            document.getElementById('hud-transp').innerText = randomOpa;
-            document.getElementById('hud-mapa-desc').innerHTML = stringConteudo;
-
-            painelHud.style.display = 'block';
         }
 
         function calcularPorcentagemHS() {
@@ -666,7 +165,7 @@
             const painelHs = document.getElementById('resultado-hs');
 
             if (isNaN(totalKills) || isNaN(totalCapas) || totalKills <= 0) {
-                alert("Insira valores válidos e maiores que zero!");
+                alert("Insira valores válidos!");
                 return;
             }
 
@@ -680,9 +179,9 @@
 
             let rotuloStatus = "";
             if (calculoFinal < 35) rotuloStatus = "Evolução constante! Ajuste o tempo de puxada.";
-            else if (calculoFinal < 55) rotuloStatus = "Bom desempenho! Sensi equilibrada entre peito e cabeça.";
-            else if (calculoFinal < 75) rotuloStatus = "Excelente! Nível competitivo e mira calibrada.";
-            else rotuloStatus = "Desempenho Crítico! Domínio completo da taxa de precisão.";
+            else if (calculoFinal < 55) rotuloStatus = "Bom desempenho! Sensi equilibrada.";
+            else if (calculoFinal < 75) rotuloStatus = "Excelente! Nível competitivo.";
+            else rotuloStatus = "Desempenho Absurdo!";
 
             document.getElementById('res-status').innerText = rotuloStatus;
             painelHs.style.display = 'block';
@@ -691,7 +190,7 @@
         function gerarEstilosDeNick() {
             const textoBase = document.getElementById('nome-nick').value.trim();
             if (textoBase === "") {
-                alert("Escreva um nome ou pseudônimo antes!");
+                alert("Escreva um nome antes!");
                 return;
             }
 
@@ -701,10 +200,8 @@
                 `🎯 ${textoBase}•fx`,
                 `☯️ 🅝🅞🅑🅡🅤_${textoBase}`,
                 `亗 ${textoBase} 亗`,
-                `꧁☠️ ${textoBase} ☠️꧂`,
                 `⚡ ${textoBase} ×͜×`,
-                `☂️ ${textoBase} 亗`,
-                `🌌 ${textoBase} ⚡`
+                `☂️ ${textoBase} 亗`
             ];
 
             const listaNicksContainer = document.getElementById('lista-nicks');
@@ -723,7 +220,7 @@
 
         function copiarParaAreaDeTransferencia(valorTexto) {
             navigator.clipboard.writeText(valorTexto);
-            alert("Copiado com sucesso!");
+            alert("Copiado!");
         }
     </script>
 </body>
