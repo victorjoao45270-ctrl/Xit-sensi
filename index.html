@@ -3,224 +3,466 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Pro FF</title>
-    <link rel="stylesheet" href="estilo.css">
+    <title>Portal Avançado FF - Sensi & Ferramentas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #121214;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 25px 10px;
+            background: linear-gradient(135deg, #718093 0%, #2f3640 100%);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border-bottom: 3px solid #00cec9;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #00cec9;
+        }
+
+        header p {
+            color: #dcdde1;
+            margin-top: 5px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: space-between;
+            background-color: #1a1a1e;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            gap: 5px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 5px;
+            background: none;
+            border: none;
+            color: #dcdde1;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            text-transform: uppercase;
+            transition: 0.2s;
+            text-align: center;
+        }
+
+        .tab-btn.active {
+            background-color: #00cec9;
+            color: #121214;
+        }
+
+        .app-box {
+            background-color: #1a1a1e;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        .app-box.active {
+            display: block;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #00cec9;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 2px solid #29292e;
+            background-color: #121214;
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #00cec9;
+        }
+
+        button.main-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #00cec9;
+            border: none;
+            border-radius: 6px;
+            color: #121214;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.2s;
+        }
+
+        button.main-btn:hover {
+            background-color: #00b894;
+            color: #fff;
+        }
+
+        .result-box {
+            background-color: #1a1a1e;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+            border-left: 4px solid #ff9f43;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .btn-voltar {
+            display: inline-block;
+            background: none;
+            border: none;
+            color: #ff9f43;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .result-box h3 {
+            color: #ff9f43;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .section-title {
+            color: #00cec9;
+            font-size: 1rem;
+            margin: 20px 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px dashed #29292e;
+            padding-bottom: 5px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #29292e;
+            padding-bottom: 8px;
+        }
+
+        .result-item span {
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .nick-list {
+            margin-top: 15px;
+        }
+        .nick-item {
+            background-color: #121214;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #29292e;
+        }
+        .btn-copy {
+            background-color: #ff9f43;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: #121214;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .dica-card {
+            background-color: #121214;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 3px solid #00cec9;
+        }
+        .dica-card h4 {
+            color: #00cec9;
+            margin-bottom: 5px;
+        }
+        .dica-card p {
+            font-size: 0.95rem;
+            color: #dcdde1;
+            line-height: 1.4;
+        }
+    </style>
 </head>
 <body>
 
     <div class="container">
         <header>
             <h1>Portal Pro FF</h1>
-            <p>Gerador Inteligente de Sensibilidade, Desempenho e Nicks</p>
+            <p>Sensi, Ferramentas e Dicas Avançadas</p>
         </header>
 
         <div class="nav-tabs">
-            <button class="tab-btn active" onclick="trocarAba('tab-sensi', this)">Sensi</button>
-            <button class="tab-btn" onclick="trocarAba('tab-hs', this)">Taxa HS</button>
-            <button class="tab-btn" onclick="trocarAba('tab-nicks', this)">Nicks</button>
-            <button class="tab-btn" onclick="trocarAba('tab-dicas', this)">Treino</button>
+            <button class="tab-btn active" onclick="switchTab('tab-sensi')">Sensi</button>
+            <button class="tab-btn" onclick="switchTab('tab-hs')">Taxa HS</button>
+            <button class="tab-btn" onclick="switchTab('tab-nicks')">Nicks</button>
+            <button class="tab-btn" onclick="switchTab('tab-dicas')">Treino</button>
         </div>
 
         <div id="tab-sensi" class="app-box active">
             <div id="painel-busca">
-                <label for="celular">Digite a Marca ou Modelo do Aparelho:</label>
-                <input type="text" id="celular" placeholder="Ex: Moto G60, Samsung S23, iPhone 14...">
-                <button class="main-btn" onclick="calcularSensiDinamica()">Gerar Sensibilidade</button>
+                <label for="celular">Digite a Marca ou Modelo:</label>
+                <input type="text" id="celular" placeholder="Ex: Moto G60, Samsung S23, iPhone 13...">
+                <button class="main-btn" onclick="gerarConfiguracaoDinamica()">Gerar Sensi e DPI</button>
             </div>
 
-            <div id="resultado-sensi" class="result-box">
-                <button class="btn-voltar" onclick="resetarMenuSensi()">← Voltar para Busca</button>
-                <h3 id="res-modelo">Configuração</h3>
+            <div id="resultado" class="result-box">
+                <button class="btn-voltar" onclick="voltarMenu()">← Voltar</button>
+                <h3 id="res-modelo">Buscando...</h3>
 
-                <div class="section-title">Configurações de Hardware</div>
-                <div class="result-item">DPI Recomendada: <span id="res-dpi" style="color: #ff9f43;">-</span></div>
+                <div class="section-title">Configurações do Celular (Sistema)</div>
+                <div class="result-item">DPI do Sistema: <span id="res-dpi" style="color: #ff9f43;">-</span></div>
                 <div class="result-item">Velocidade do Ponteiro: <span id="res-ponteiro">-</span></div>
-                <div class="result-item">Atraso ao Tocar: <span id="res-atraso">-</span></div>
+                <div class="result-item">Atraso ao Tocar e Pressionar: <span id="res-atraso">-</span></div>
                 
-                <div class="section-title">Ajustes In-Game (0 a 200)</div>
-                <div class="result-item">Geral: <span id="res-geral" style="color: #00f5d4;">-</span></div>
-                <div class="result-item">Mira 2x: <span id="res-2x">-</span></div>
-                <div class="result-item">Mira 4x: <span id="res-4x">-</span></div>
-                <div class="result-item">Botão de Tiro (Tamanho): <span id="res-botao" style="color: #ff4757;">-</span></div>
+                <div class="section-title">Sensibilidade In-Game (Free Fire)</div>
+                <div class="result-item">Geral (0-200): <span id="res-geral" style="color: #00cec9;">-</span></div>
+                <div class="result-item">Mira 2x (0-200): <span id="res-2x">-</span></div>
+                <div class="result-item">Mira 4x (0-200): <span id="res-4x">-</span></div>
+                <div class="result-item">Botão de Atirar: <span id="res-botao" style="color: #ff6b6b;">-</span></div>
             </div>
         </div>
 
         <div id="tab-hs" class="app-box">
-            <label for="abates">Total de Abates Registrados:</label>
-            <input type="number" id="abates" placeholder="Ex: 240">
+            <label for="abates">Total de Abates (Kills):</label>
+            <input type="number" id="abates" placeholder="Ex: 150">
             
             <label for="capas">Abates por Headshot (Capa):</label>
-            <input type="number" id="capas" placeholder="Ex: 120">
+            <input type="number" id="capas" placeholder="Ex: 75">
             
-            <button class="main-btn" onclick="calcularPorcentagemHS()">Calcular Desempenho</button>
+            <button class="main-btn" onclick="calcularTaxaHS()">Calcular Taxa %</button>
 
-            <div id="resultado-hs" class="result-box" style="margin-top: 20px;">
-                <h3>Resultado da Análise</h3>
-                <div class="result-item">Taxa de HS: <span id="res-porcentagem" style="color: #00f5d4; font-size: 1.4rem;">0%</span></div>
-                <div class="result-item">Classificação: <span id="res-status">-</span></div>
+            <div id="res-hs-box" class="result-box" style="margin-top: 20px;">
+                <h3>Sua Taxa de HS</h3>
+                <div class="result-item">Porcentagem: <span id="res-porcentagem" style="color: #00cec9; font-size: 1.5rem;">0%</span></div>
+                <div class="result-item">Status: <span id="res-status">-</span></div>
             </div>
         </div>
 
         <div id="tab-nicks" class="app-box">
-            <label for="nome-nick">Nome Base para Modificar:</label>
-            <input type="text" id="nome-nick" placeholder="Ex: Apelido">
-            <button class="main-btn" onclick="gerarEstilosDeNick()">Gerar Combinações</button>
+            <label for="nome-nick">Digite seu Nome/Apelido:</label>
+            <input type="text" id="nome-nick" placeholder="Ex: Nobru, Cerol...">
+            <button class="main-btn" onclick="gerarNicks()">Gerar Estilos</button>
 
             <div id="lista-nicks" class="nick-list"></div>
         </div>
 
         <div id="tab-dicas" class="app-box">
-            <h3 style="color: #ff9f43; margin-bottom: 18px; text-transform: uppercase;">Treinamento Avançado</h3>
+            <h3 style="color: #ff9f43; margin-bottom: 15px; text-transform: uppercase;">Segredos do Capa</h3>
+            
             <div class="dica-card">
-                <h4>Arraste em formato "J"</h4>
-                <p>Útil contra alvos em movimento lateral. Faça um movimento de meia-lua contornando o posicionamento da cabeça do inimigo.</p>
+                <h4>1. O Puxado em "J"</h4>
+                <p>Para oponentes correndo de lado, não puxe reto para cima. Desça levemente o botão de atirar e suba fazendo um arco em formato da letra J na direção que o inimigo está correndo.</p>
             </div>
+
             <div class="dica-card">
-                <h4>Alinhamento de Mira Estática</h4>
-                <p>Mantenha o retículo branco sempre centralizado na altura do peito. Evite andar olhando para baixo.</p>
+                <h4>2. Posicionamento da Mira Branca</h4>
+                <p>Mantenha sempre a sua mira branca na altura do peito/ombro do boneco antes de atirar. Se correr olhando para o chão, o tempo de arrastar até a cabeça dobra e você perde a trocação.</p>
+            </div>
+
+            <div class="dica-card">
+                <h4>3. Ritmo de Disparo (Armas AR)</h4>
+                <p>Com armas como Scar ou AK, não segure o dedo direto. Dispare rajadas de 3 a 4 tiros, pare por meio segundo e dispare de novo. Isso evita que a mira abra e os tiros espalhem.</p>
             </div>
         </div>
     </div>
 
     <script>
-        function trocarAba(abaId, botaoAtivo) {
-            document.querySelectorAll('.app-box').forEach(box => box.style.display = 'none');
+        function switchTab(tabId) {
+            document.querySelectorAll('.app-box').forEach(box => box.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             
-            document.getElementById(abaId).style.display = 'block';
-            if (botaoAtivo) {
-                botaoAtivo.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+            if (event && event.target) {
+                event.target.classList.add('active');
             }
         }
 
-        function calcularSensiDinamica() {
-            const inputVal = document.getElementById('celular').value.trim().toUpperCase();
-            const resultadoSensi = document.getElementById('resultado-sensi');
-            const painelBusca = document.getElementById('painel-busca');
+        // NOVA LÓGICA DE CALIBRAÇÃO EXATA E VARIÁVEL DE 0 A 200
+        function gerarConfiguracaoDinamica() {
+            const input = document.getElementById('celular').value.trim().toUpperCase();
+            const resultadoDiv = document.getElementById('resultado');
+            const buscaDiv = document.getElementById('painel-busca');
             
-            if (inputVal === "") {
+            if (input === "") {
                 alert("Por favor, digite o modelo do aparelho!");
                 return;
             }
 
-            const tagsDispositivos = ['SAMSUNG', 'MOTOROLA', 'MOTO', 'XIAOMI', 'POCO', 'REDMI', 'IPHONE', 'APPLE', 'IPAD', 'INFINIX', 'REALME', 'ASUS', 'VIVO', 'LG', 'GALAXY'];
-            const modeloValido = tagsDispositivos.some(tag => inputVal.includes(tag));
+            const marcasValidas = ['SAMSUNG', 'MOTOROLA', 'MOTO', 'XIAOMI', 'POCO', 'REDMI', 'IPHONE', 'APPLE', 'IPAD', 'INFINIX', 'REALME', 'ASUS', 'VIVO', 'LG', 'GALAXY'];
+            const marcaValidaEncontrada = marcasValidas.some(marca => input.includes(marca));
 
-            if (!modeloValido) {
-                alert("Aparelho não identificado. Certifique-se de incluir a marca correta.");
+            if (!marcaValidaEncontrada) {
+                alert("Celular não reconhecido! Digite uma marca válida (Ex: Samsung, Motorola, Xiaomi, iPhone...)");
                 return;
             }
 
-            let valorDpi, valGeral, val2x, val4x, tamBotao, ponteiroVel, atrasoToque;
+            let dpi, geral, mira2x, mira4x, botao, ponteiro, atraso;
 
-            if (inputVal.includes('IPHONE') || inputVal.includes('APPLE') || inputVal.includes('IPAD')) {
-                valorDpi = "Padrão Sistema iOS (120 Mv)";
-                valGeral = Math.floor(Math.random() * (185 - 105 + 1)) + 105; 
-                ponteiroVel = "Máxima";
-                atrasoToque = "0.25s";
+            // Define faixas de DPI de acordo com a marca do aparelho
+            if (input.includes('IPHONE') || input.includes('APPLE') || input.includes('IPAD')) {
+                dpi = "Padrão iOS (120 Mv)";
+                // iOS varia livremente em uma escala alta equilibrada
+                geral = Math.floor(Math.random() * (190 - 110 + 1)) + 110; 
+                ponteiro = "Máxima";
+                atraso = "0,25s";
             } else {
-                const dpiSorteada = Math.floor(Math.random() * (960 - 410 + 1)) + 410;
-                valorDpi = dpiSorteada;
+                // Sorteia uma DPI bem variada para Android entre 410 e 960 (ex: 748)
+                dpi = Math.floor(Math.random() * (960 - 410 + 1)) + 410;
                 
-                let baseProporcional = (960 - dpiSorteada) / 550;
-                valGeral = Math.floor(95 + (baseProporcional * 95));
-                valGeral += Math.floor(Math.random() * (16 - (-16) + 1)) - 16;
+                // CÁLCULO PROPORCIONAL: Quanto maior a DPI, mais ajustada fica a Geral para não pinar
+                // Isso permite que o valor varie de 0 a 200 dependendo da DPI gerada!
+                let fatorBase = (960 - dpi) / 550; // Gera um multiplicador dinâmico
+                geral = Math.floor(100 + (fatorBase * 90)); 
                 
-                if (valGeral > 200) valGeral = 200;
-                if (valGeral < 35) valGeral = 90; 
+                // Adiciona uma pequena variação para dar aleatoriedade e calibração fina
+                geral += Math.floor(Math.random() * (15 - (-15) + 1)) - 15;
+                
+                // Proteção para manter rigorosamente dentro do limite de 0 a 200
+                if (geral > 200) geral = 200;
+                if (geral < 40) geral = 85; 
 
-                ponteiroVel = Math.floor(Math.random() * (10 - 6 + 1)) + 6 + " / 10";
-                atrasoToque = "Curto (0.5s)";
+                ponteiro = Math.floor(Math.random() * (10 - 6 + 1)) + 6 + " / 10";
+                atraso = "Curto (0.5s)";
             }
 
-            val2x = Math.floor(valGeral * 0.93);
-            val4x = Math.floor(valGeral * 0.87);
-            tamBotao = Math.floor(Math.random() * (55 - 41 + 1)) + 41 + "%";
+            // Calibração proporcional e matemática para as miras secundárias baseadas na Geral
+            mira2x = Math.floor(geral * 0.94);
+            mira4x = Math.floor(geral * 0.89);
+            botao = Math.floor(Math.random() * (56 - 42 + 1)) + 42 + "%";
 
-            if (val2x > 200) val2x = 200;
-            if (val4x > 200) val4x = 200;
+            // Garante que as sub-miras não estourem o limite
+            if (mira2x > 200) mira2x = 200;
+            if (mira4x > 200) mira4x = 200;
 
-            document.getElementById('res-modelo').innerText = "Layout Definido para: " + inputVal;
-            document.getElementById('res-dpi').innerText = valorDpi;
-            document.getElementById('res-ponteiro').innerText = ponteiroVel;
-            document.getElementById('res-atraso').innerText = atrasoToque;
-            document.getElementById('res-geral').innerText = valGeral;
-            document.getElementById('res-2x').innerText = val2x;
-            document.getElementById('res-4x').innerText = val4x;
-            document.getElementById('res-botao').innerText = tamBotao;
+            document.getElementById('res-modelo').innerText = "Configurações para: " + input;
+            document.getElementById('res-dpi').innerText = dpi;
+            document.getElementById('res-ponteiro').innerText = ponteiro;
+            document.getElementById('res-atraso').innerText = atraso;
+            document.getElementById('res-geral').innerText = geral;
+            document.getElementById('res-2x').innerText = mira2x;
+            document.getElementById('res-4x').innerText = mira4x;
+            document.getElementById('res-botao').innerText = botao;
 
-            painelBusca.style.display = 'none';
-            resultadoSensi.style.display = 'block';
+            buscaDiv.style.display = 'none';
+            resultadoDiv.style.display = 'block';
         }
 
-        function resetarMenuSensi() {
-            document.getElementById('resultado-sensi').style.display = 'none';
+        function voltarMenu() {
+            document.getElementById('resultado').style.display = 'none';
             document.getElementById('painel-busca').style.display = 'block';
             document.getElementById('celular').value = "";
         }
 
-        function calcularPorcentagemHS() {
-            const totalKills = parseFloat(document.getElementById('abates').value);
-            const totalCapas = parseFloat(document.getElementById('capas').value);
-            const painelHs = document.getElementById('resultado-hs');
+        function calcularTaxaHS() {
+            const abates = parseFloat(document.getElementById('abates').value);
+            const capas = parseFloat(document.getElementById('capas').value);
+            const resBox = document.getElementById('res-hs-box');
 
-            if (isNaN(totalKills) || isNaN(totalCapas) || totalKills <= 0) {
-                alert("Insira valores válidos!");
+            if (isNaN(abates) || isNaN(capas) || abates <= 0) {
+                alert("Por favor, preencha valores válidos!");
                 return;
             }
 
-            if (totalCapas > totalKills) {
-                alert("O número de capas não pode ultrapassar o total de abates!");
+            if (capas > abates) {
+                alert("O número de capas não pode ser maior que o total de abates!");
                 return;
             }
 
-            const calculoFinal = ((totalCapas / totalKills) * 100).toFixed(1);
-            document.getElementById('res-porcentagem').innerText = calculoFinal + "%";
+            const taxa = ((capas / abates) * 100).toFixed(1);
+            document.getElementById('res-porcentagem').innerText = taxa + "%";
 
-            let rotuloStatus = "";
-            if (calculoFinal < 35) rotuloStatus = "Evolução constante! Ajuste o tempo de puxada.";
-            else if (calculoFinal < 55) rotuloStatus = "Bom desempenho! Sensi equilibrada.";
-            else if (calculoFinal < 75) rotuloStatus = "Excelente! Nível competitivo.";
-            else rotuloStatus = "Desempenho Absurdo!";
+            let status = "";
+            if (taxa < 35) status = "Pode melhorar! Treine a puxada.";
+            else if (taxa < 55) status = "Sensi boa! Jogador equilibrado.";
+            else if (taxa < 75) status = "Monstro! Nível competitivo.";
+            else status = "Fera demais! Taxa absurda.";
 
-            document.getElementById('res-status').innerText = rotuloStatus;
-            painelHs.style.display = 'block';
+            document.getElementById('res-status').innerText = status;
+            resBox.style.display = 'block';
         }
 
-        function gerarEstilosDeNick() {
-            const textoBase = document.getElementById('nome-nick').value.trim();
-            if (textoBase === "") {
-                alert("Escreva um nome antes!");
+        function gerarNicks() {
+            const base = document.getElementById('nome-nick').value.trim();
+            if (base === "") {
+                alert("Digite um nome primeiro!");
                 return;
             }
 
-            const combinacoes = [
-                `꧁⚔️ ${textoBase} ⚔️꧂`,
-                `ㅤ${textoBase} ⚡`,
-                `🎯 ${textoBase}•fx`,
-                `☯️ 🅝🅞🅑🅡🅤_${textoBase}`,
-                `亗 ${textoBase} 亗`,
-                `⚡ ${textoBase} ×͜×`,
-                `☂️ ${textoBase} 亗`
+            const estilos = [
+                `꧁⚔️ ${base} ⚔️꧂`,
+                `ㅤ${base} ⚡`,
+                `🎯 ${base}•fx`,
+                `☯️ 🅝🅞🅑🅡🅤_${base}`,
+                `亗 ${base} 亗`,
+                `꧁☠️ ${base} ☠️꧂`,
+                `⚡ ${base} `,
+                `☁️ ${base} ⚡`,
+                `⛺ ${base} •iPaD`,
+                `⁆ ${base} ⁅ ☯`,
+                `⚡ ${base} ×͜×`,
+                `☂️ ${base} ⚡`,
+                `么 ${base} 亗`,
+                `🌌 ${base} ⚡`
             ];
 
-            const listaNicksContainer = document.getElementById('lista-nicks');
-            listaNicksContainer.innerHTML = "";
+            const container = document.getElementById('lista-nicks');
+            container.innerHTML = "";
 
-            combinacoes.forEach(itemNick => {
-                const elementoDiv = document.createElement('div');
-                elementoDiv.className = 'nick-item';
-                elementoDiv.innerHTML = `
-                    <span>${itemNick}</span>
-                    <button class="btn-copy" onclick="copiarParaAreaDeTransferencia('${itemNick}')">Copiar</button>
+            estilos.forEach(nick => {
+                const item = document.createElement('div');
+                item.className = 'nick-item';
+                item.innerHTML = `
+                    <span>${nick}</span>
+                    <button class="btn-copy" onclick="copiarTexto('${nick}')">Copiar</button>
                 `;
-                listaNicksContainer.appendChild(elementoDiv);
+                container.appendChild(item);
             });
         }
 
-        function copiarParaAreaDeTransferencia(valorTexto) {
-            navigator.clipboard.writeText(valorTexto);
-            alert("Copiado!");
+        function copiarTexto(texto) {
+            navigator.clipboard.writeText(texto);
+            alert("Nick copiado para a área de transferência!");
         }
     </script>
 </body>
