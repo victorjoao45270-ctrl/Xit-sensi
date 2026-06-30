@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Sensi Dinâmico</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #121214;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 25px 10px;
+            background: linear-gradient(135deg, #718093 0%, #2f3640 100%);
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border-bottom: 3px solid #00cec9;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #00cec9;
+        }
+
+        header p {
+            color: #dcdde1;
+            margin-top: 5px;
+        }
+
+        .search-box {
+            background-color: #1a1a1e;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .search-box label {
+            display: block;
+            margin-bottom: 10px;
+            color: #00cec9;
+            font-weight: bold;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 2px solid #29292e;
+            background-color: #121214;
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #00cec9;
+        }
+
+        .search-box button {
+            width: 100%;
+            padding: 12px;
+            background-color: #00cec9;
+            border: none;
+            border-radius: 6px;
+            color: #121214;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.2s;
+        }
+
+        .search-box button:hover {
+            background-color: #00b894;
+            color: #fff;
+        }
+
+        .result-box {
+            background-color: #1a1a1e;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+            border-left: 4px solid #ff9f43;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .btn-voltar {
+            display: inline-block;
+            background: none;
+            border: none;
+            color: #ff9f43;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            transition: 0.2s;
+        }
+
+        .btn-voltar:hover {
+            color: #fff;
+        }
+
+        .result-box h3 {
+            color: #ff9f43;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .section-title {
+            color: #00cec9;
+            font-size: 1rem;
+            margin: 20px 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px dashed #29292e;
+            padding-bottom: 5px;
+        }
+
+        /* AJUSTE AQUI: Mantém os textos 100% alinhados nas pontas */
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #29292e;
+            padding-bottom: 8px;
+        }
+
+        .result-item span {
+            font-weight: bold;
+            color: #ffffff;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header id="menu-header">
+            <h1>Gerador Avançado FF</h1>
+            <p>Configurações completas (Jogo + Sistema do Celular)</p>
+        </header>
+
+        <div id="painel-busca" class="search-box">
+            <label for="celular">Digite a Marca ou Modelo:</label>
+            <input type="text" id="celular" placeholder="Ex: Moto G60, Samsung S23, iPhone 13...">
+            <button onclick="gerarConfiguracaoDinamica()">Gerar Sensi e DPI</button>
+        </div>
+
+        <div id="resultado" class="result-box">
+            <button class="btn-voltar" onclick="voltarMenu()">← Voltar</button>
+            
+            <h3 id="res-modelo">Buscando...</h3>
+
+            <div class="section-title">Configurações do Celular (Sistema)</div>
+            <div class="result-item">DPI do Sistema: <span id="res-dpi" style="color: #ff9f43;">-</span></div>
+            <div class="result-item">Velocidade do Ponteiro: <span id="res-ponteiro">-</span></div>
+            <div class="result-item">Atraso ao Tocar e Pressionar: <span id="res-atraso">-</span></div>
+            
+            <div class="section-title">Sensibilidade In-Game (Free Fire)</div>
+            <div class="result-item">Geral: <span id="res-geral" style="color: #00cec9;">-</span></div>
+            <div class="result-item">Mira 2x: <span id="res-2x">-</span></div>
+            <div class="result-item">Mira 4x: <span id="res-4x">-</span></div>
+            <div class="result-item">Botão de Atirar: <span id="res-botao" style="color: #ff6b6b;">-</span></div>
+        </div>
+    </div>
+
+    <script>
+        function gerarConfiguracaoDinamica() {
+            const input = document.getElementById('celular').value.trim().toUpperCase();
+            const resultadoDiv = document.getElementById('resultado');
+            const buscaDiv = document.getElementById('painel-busca');
+            
+            if (input === "") {
+                alert("Por favor, digite o modelo do aparelho!");
+                return;
+            }
+
+            const marcasValidas = ['SAMSUNG', 'MOTOROLA', 'MOTO', 'XIAOMI', 'POCO', 'REDMI', 'IPHONE', 'APPLE', 'IPAD', 'INFINIX', 'REALME', 'ASUS', 'VIVO', 'LG', 'GALAXY'];
+            const marcaValidaEncontrada = marcasValidas.some(marca => input.includes(marca));
+
+            if (!marcaValidaEncontrada) {
+                alert("Celular não reconhecido! Digite uma marca válida (Ex: Samsung, Motorola, Xiaomi, iPhone, Realme...)");
+                return;
+            }
+
+            let dpi, geral, mira2x, mira4x, botao, ponteiro, atraso;
+
+            if (input.includes('IPHONE') || input.includes('APPLE') || input.includes('IPAD')) {
+                dpi = "Padrão iOS (120 Mv)";
+                geral = Math.floor(Math.random() * (200 - 120 + 1)) + 120;
+                mira2x = Math.floor(geral * 0.92);
+                mira4x = Math.floor(geral * 0.88);
+                botao = Math.floor(Math.random() * (52 - 41 + 1)) + 41 + "%";
+                ponteiro = "Máxima";
+                atraso = "0,25s";
+            } else {
+                dpi = Math.floor(Math.random() * (960 - 410 + 1)) + 410;
+                geral = Math.floor(Math.random() * (200 - 105 + 1)) + 105; 
+                
+                mira2x = Math.floor(geral * 0.95);
+                if (mira2x > 200) mira2x = 200;
+                
+                mira4x = Math.floor(geral * 0.90);
+                if (mira4x > 200) mira4x = 200;
+
+                botao = Math.floor(Math.random() * (60 - 40 + 1)) + 40 + "%";
+                
+                const barrasPonteiro = Math.floor(Math.random() * (10 - 8 + 1)) + 8;
+                ponteiro = barrasPonteiro + " / 10";
+                atraso = "Curto (0.5s)";
+            }
+
+            document.getElementById('res-modelo').innerText = "Configurações para: " + input;
+            document.getElementById('res-dpi').innerText = dpi;
+            document.getElementById('res-ponteiro').innerText = ponteiro;
+            document.getElementById('res-atraso').innerText = atraso;
+            document.getElementById('res-geral').innerText = geral;
+            document.getElementById('res-2x').innerText = mira2x;
+            document.getElementById('res-4x').innerText = mira4x;
+            document.getElementById('res-botao').innerText = botao;
+
+            buscaDiv.style.display = 'none';
+            resultadoDiv.style.display = 'block';
+        }
+
+        function voltarMenu() {
+            document.getElementById('resultado').style.display = 'none';
+            document.getElementById('painel-busca').style.display = 'block';
+            document.getElementById('celular').value = "";
+        }
+    </script>
+
+</body>
+</html>
