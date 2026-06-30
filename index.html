@@ -57,11 +57,11 @@
 
         .tab-btn {
             flex: 1;
-            padding: 10px 5px;
+            padding: 10px 2px;
             background: none;
             border: none;
             color: #dcdde1;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: bold;
             cursor: pointer;
             border-radius: 5px;
@@ -234,6 +234,7 @@
 
         <div class="nav-tabs">
             <button class="tab-btn active" onclick="switchTab('tab-sensi')">Sensi</button>
+            <button class="tab-btn" onclick="switchTab('tab-hud')">HUDs</button>
             <button class="tab-btn" onclick="switchTab('tab-hs')">Taxa HS</button>
             <button class="tab-btn" onclick="switchTab('tab-nicks')">Nicks</button>
             <button class="tab-btn" onclick="switchTab('tab-dicas')">Treino</button>
@@ -260,6 +261,28 @@
                 <div class="result-item">Mira 2x (0-200): <span id="res-2x">-</span></div>
                 <div class="result-item">Mira 4x (0-200): <span id="res-4x">-</span></div>
                 <div class="result-item">Botão de Atirar: <span id="res-botao" style="color: #ff6b6b;">-</span></div>
+            </div>
+        </div>
+
+        <div id="tab-hud" class="app-box">
+            <label for="select-dedos">Escolha a quantidade de dedos:</label>
+            <select id="select-dedos">
+                <option value="2">HUD 2 Dedos (Clássico)</option>
+                <option value="3">HUD 3 Dedos (Movimentação)</option>
+                <option value="4">HUD 4 Dedos (Competitivo)</option>
+                <option value="5">HUD 5 Dedos (Tela Grande/Tablet)</option>
+                <option value="6">HUD 6 Dedos (Instaplayer Extremo)</option>
+            </select>
+            <button class="main-btn" onclick="gerarHudEspecifico()">Gerar Layout de HUD</button>
+
+            <div id="res-hud-box" class="result-box" style="margin-top: 20px;">
+                <h3 id="hud-titulo">HUD Gerado</h3>
+                <div class="result-item">Tamanho do Botão de Atirar: <span id="hud-tam-botao" style="color: #ff6b6b;">-</span></div>
+                <div class="result-item">Transparência indicada: <span id="hud-transparencia">-</span></div>
+                <div class="result-item" style="display: block; font-size: 0.95rem; line-height: 1.4; color: #dcdde1; padding-top: 10px;">
+                    <strong>Posição dos Botões Principais:</strong><br><br>
+                    <span id="hud-descricao">-</span>
+                </div>
             </div>
         </div>
 
@@ -318,7 +341,6 @@
             }
         }
 
-        // NOVA LÓGICA DE CALIBRAÇÃO EXATA E VARIÁVEL DE 0 A 200
         function gerarConfiguracaoDinamica() {
             const input = document.getElementById('celular').value.trim().toUpperCase();
             const resultadoDiv = document.getElementById('resultado');
@@ -339,26 +361,17 @@
 
             let dpi, geral, mira2x, mira4x, botao, ponteiro, atraso;
 
-            // Define faixas de DPI de acordo com a marca do aparelho
             if (input.includes('IPHONE') || input.includes('APPLE') || input.includes('IPAD')) {
                 dpi = "Padrão iOS (120 Mv)";
-                // iOS varia livremente em uma escala alta equilibrada
                 geral = Math.floor(Math.random() * (190 - 110 + 1)) + 110; 
                 ponteiro = "Máxima";
                 atraso = "0,25s";
             } else {
-                // Sorteia uma DPI bem variada para Android entre 410 e 960 (ex: 748)
                 dpi = Math.floor(Math.random() * (960 - 410 + 1)) + 410;
-                
-                // CÁLCULO PROPORCIONAL: Quanto maior a DPI, mais ajustada fica a Geral para não pinar
-                // Isso permite que o valor varie de 0 a 200 dependendo da DPI gerada!
-                let fatorBase = (960 - dpi) / 550; // Gera um multiplicador dinâmico
+                let fatorBase = (960 - dpi) / 550; 
                 geral = Math.floor(100 + (fatorBase * 90)); 
-                
-                // Adiciona uma pequena variação para dar aleatoriedade e calibração fina
                 geral += Math.floor(Math.random() * (15 - (-15) + 1)) - 15;
                 
-                // Proteção para manter rigorosamente dentro do limite de 0 a 200
                 if (geral > 200) geral = 200;
                 if (geral < 40) geral = 85; 
 
@@ -366,12 +379,10 @@
                 atraso = "Curto (0.5s)";
             }
 
-            // Calibração proporcional e matemática para as miras secundárias baseadas na Geral
             mira2x = Math.floor(geral * 0.94);
             mira4x = Math.floor(geral * 0.89);
             botao = Math.floor(Math.random() * (56 - 42 + 1)) + 42 + "%";
 
-            // Garante que as sub-miras não estourem o limite
             if (mira2x > 200) mira2x = 200;
             if (mira4x > 200) mira4x = 200;
 
@@ -394,76 +405,67 @@
             document.getElementById('celular').value = "";
         }
 
-        function calcularTaxaHS() {
-            const abates = parseFloat(document.getElementById('abates').value);
-            const capas = parseFloat(document.getElementById('capas').value);
-            const resBox = document.getElementById('res-hs-box');
+        // NOVA FUNÇÃO: GERADOR DE HUDS SEPARADO E COM VARIAÇÕES QUE MUDAM A CADA CLIQUE
+        function gerarHudEspecifico() {
+            const numDedos = document.getElementById('select-dedos').value;
+            const resBox = document.getElementById('res-hud-box');
+            
+            // Variáveis calculadas aleatoriamente a cada clique para mudar o HUD
+            const tamanhoBotao = Math.floor(Math.random() * (62 - 40 + 1)) + 40 + "%";
+            const transparencia = Math.floor(Math.random() * (50 - 15 + 1)) + 15 + "%";
 
-            if (isNaN(abates) || isNaN(capas) || abates <= 0) {
-                alert("Por favor, preencha valores válidos!");
-                return;
+            // Listas de alternativas de posições para variar os layouts
+            const posPular = ["Canto superior direito (perto do mapa)", "Canto inferior direito (clássico)", "Topo superior esquerdo"];
+            const posAgachar = ["Canto inferior esquerdo (colado no analógico)", "Canto inferior direito embaixo do pulo", "Topo esquerdo"];
+            const posGelo = ["Canto inferior esquerdo gigante", "Topo esquerdo centralizado", "Centro-esquerdo da tela"];
+
+            // Escolhe variações aleatórias dos arrays para os huds mudarem constantemente
+            const vPular = posPular[Math.floor(Math.random() * posPular.length)];
+            const vAgachar = posAgachar[Math.floor(Math.random() * posAgachar.length)];
+            const vGelo = posGelo[Math.floor(Math.random() * posGelo.length)];
+
+            let titulo = "";
+            let descricao = "";
+
+            if (numDedos === "2") {
+                titulo = "Pro Layout - 2 Dedos";
+                descricao = `• <strong>Botão de Atirar:</strong> Inferior Direito.<br>` +
+                            `• <strong>Botão de Pular:</strong> ${vPular === "Topo superior esquerdo" ? "Canto inferior direito" : vPular}.<br>` +
+                            `• <strong>Botão de Agachar:</strong> ${vAgachar}.<br>` +
+                            `• <strong>Botão de Gelo:</strong> Lado esquerdo da tela (Tamanho recomendado: 100%).<br>` +
+                            `• <em>Dica: Focado em precisão para jogadores casuais ou quem joga campeonatos sem focar em tela poluída.</em>`;
+            } 
+            else if (numDedos === "3") {
+                titulo = "Mestre da Movimentação - 3 Dedos";
+                descricao = `• <strong>Botão de Atirar:</strong> Inferior Direito para puxar capa limpo.<br>` +
+                            `• <strong>Botão de Pular ou Troca de Armas:</strong> Alocado no ${vPular} para ser acionado com o indicador esquerdo.<br>` +
+                            `• <strong>Botão de Agachar:</strong> Canto inferior esquerdo.<br>` +
+                            `• <strong>Botão de Gelo:</strong> ${vGelo}.<br>` +
+                            `• <em>Dica: Perfeito para fazer o combo de um tiro, trocar de arma e correr sem travar o boneco.</em>`;
+            } 
+            else if (numDedos === "4") {
+                titulo = "Layout Competitivo Pro - 4 Dedos";
+                descricao = `• <strong>Botão de Mirar:</strong> Topo superior direito (Indicador direito).<br>` +
+                            `• <strong>Botão de Pular/Troca:</strong> Topo superior esquerdo (Indicador esquerdo).<br>` +
+                            `• <strong>Botão de Agachar:</strong> ${vAgachar}.<br>` +
+                            `• <strong>Botão de Gelo:</strong> ${vGelo} (Tamanho: 100%).<br>` +
+                            `• <em>Dica: Padrão usado pela maioria dos jogadores profissionais da LBFF devido ao tempo de resposta imediato para agachar e dropar gelo rápido.</em>`;
+            }
+            else if (numDedos === "5") {
+                titulo = "Mobile Extremo / Tablet - 5 Dedos";
+                descricao = `• <strong>Controles da Mão Esquerda:</strong> Dedão no analógico, Indicador no botão de agachar e Dedo Médio no botão de Gelo ou Troca Rápida de Arma.<br>` +
+                            `• <strong>Controles da Mão Direita:</strong> Dedão focado nas miras e botão de disparo principal, Indicador focado no botão de pular.<br>` +
+                            `• <strong>Configuração do Gelo:</strong> ${vGelo}.<br>` +
+                            `• <em>Dica: Libera o dedão direito exclusivamente para controlar a sensibilidade da tela sem interrupções.</em>`;
+            }
+            else if (numDedos === "6") {
+                titulo = "Layout Deus do Recurso - 6 Dedos";
+                descricao = `• <strong>Distribuição:</strong> 3 dedos ativos na esquerda e 3 dedos ativos na direita.<br>` +
+                            `• <strong>Botões de Ação Rápida (Gelo, Pular, Mirar):</strong> Todos movidos para as bordas superiores do visor.<br>` +
+                            `• <strong>Botão de Atirar Secundário:</strong> Ativado no topo esquerdo para dar tiros rápidos enquanto faz mira perfeita com a direita.<br>` +
+                            `• <em>Dica: Recomendado puramente para iPads ou celulares de tela gigante para evitar toques falsos. Resposta instantânea incomparável.</em>`;
             }
 
-            if (capas > abates) {
-                alert("O número de capas não pode ser maior que o total de abates!");
-                return;
-            }
-
-            const taxa = ((capas / abates) * 100).toFixed(1);
-            document.getElementById('res-porcentagem').innerText = taxa + "%";
-
-            let status = "";
-            if (taxa < 35) status = "Pode melhorar! Treine a puxada.";
-            else if (taxa < 55) status = "Sensi boa! Jogador equilibrado.";
-            else if (taxa < 75) status = "Monstro! Nível competitivo.";
-            else status = "Fera demais! Taxa absurda.";
-
-            document.getElementById('res-status').innerText = status;
-            resBox.style.display = 'block';
-        }
-
-        function gerarNicks() {
-            const base = document.getElementById('nome-nick').value.trim();
-            if (base === "") {
-                alert("Digite um nome primeiro!");
-                return;
-            }
-
-            const estilos = [
-                `꧁⚔️ ${base} ⚔️꧂`,
-                `ㅤ${base} ⚡`,
-                `🎯 ${base}•fx`,
-                `☯️ 🅝🅞🅑🅡🅤_${base}`,
-                `亗 ${base} 亗`,
-                `꧁☠️ ${base} ☠️꧂`,
-                `⚡ ${base} `,
-                `☁️ ${base} ⚡`,
-                `⛺ ${base} •iPaD`,
-                `⁆ ${base} ⁅ ☯`,
-                `⚡ ${base} ×͜×`,
-                `☂️ ${base} ⚡`,
-                `么 ${base} 亗`,
-                `🌌 ${base} ⚡`
-            ];
-
-            const container = document.getElementById('lista-nicks');
-            container.innerHTML = "";
-
-            estilos.forEach(nick => {
-                const item = document.createElement('div');
-                item.className = 'nick-item';
-                item.innerHTML = `
-                    <span>${nick}</span>
-                    <button class="btn-copy" onclick="copiarTexto('${nick}')">Copiar</button>
-                `;
-                container.appendChild(item);
-            });
-        }
-
-        function copiarTexto(texto) {
-            navigator.clipboard.writeText(texto);
-            alert("Nick copiado para a área de transferência!");
-        }
-    </script>
-</body>
-</html>
+            document.getElementById('hud-titulo').innerText = titulo;
+            document.getElementById('hud-tam-botao').innerText = tamanhoBotao;
+      
