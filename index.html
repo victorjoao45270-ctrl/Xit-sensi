@@ -243,7 +243,7 @@
             <div id="painel-busca">
                 <label for="celular">Digite a Marca ou Modelo:</label>
                 <input type="text" id="celular" placeholder="Ex: Moto G60, Samsung S23, iPhone 13...">
-                <button class="main-btn" onclick="generarConfiguracaoDinamica()">Gerar Sensi e DPI</button>
+                <button class="main-btn" onclick="gerarConfiguracaoDinamica()">Gerar Sensi e DPI</button>
             </div>
 
             <div id="resultado" class="result-box">
@@ -313,10 +313,13 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             
             document.getElementById(tabId).classList.add('active');
-            event.target.classList.add('active');
+            
+            // Corrige o bug de clique nas abas
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
         }
 
-        // LÓGICA DA SENSI CALIBRADA POR MARCA ATÉ 200
         function gerarConfiguracaoDinamica() {
             const input = document.getElementById('celular').value.trim().toUpperCase();
             const resultadoDiv = document.getElementById('resultado');
@@ -337,7 +340,6 @@
 
             let dpi, geral, mira2x, mira4x, botao, ponteiro, atraso;
 
-            // 1. Tratamento para Apple (iOS) - Escala calibrada até 200
             if (input.includes('IPHONE') || input.includes('APPLE') || input.includes('IPAD')) {
                 dpi = "Padrão iOS (120 Mv)";
                 geral = Math.floor(Math.random() * (195 - 180 + 1)) + 180; 
@@ -347,7 +349,6 @@
                 ponteiro = "Máxima";
                 atraso = "0,25s";
             } 
-            // 2. Tratamento para Samsung de alta performance (Linha S)
             else if (input.includes('S20') || input.includes('S21') || input.includes('S22') || input.includes('S23') || input.includes('S24')) {
                 dpi = Math.floor(Math.random() * (560 - 480 + 1)) + 480; 
                 geral = Math.floor(Math.random() * (185 - 170 + 1)) + 170;
@@ -357,17 +358,15 @@
                 ponteiro = "7 / 10";
                 atraso = "Curto (0.5s)";
             }
-            // 3. Tratamento Geral para Samsung (Linhas A e M)
             else if (input.includes('SAMSUNG') || input.includes('GALAXY')) {
                 dpi = Math.floor(Math.random() * (780 - 640 + 1)) + 640; 
-                geral = 200; // Máximo na nova escala para compensar a tela pesada
+                geral = 200; 
                 mira2x = 196;
                 mira4x = 192;
                 botao = Math.floor(Math.random() * (48 - 43 + 1)) + 43 + "%";
                 ponteiro = "9 / 10";
                 atraso = "Curto (0.5s)";
             }
-            // 4. Tratamento para Xiaomi / Poco / Redmi
             else if (input.includes('XIAOMI') || input.includes('POCO') || input.includes('REDMI')) {
                 dpi = Math.floor(Math.random() * (890 - 720 + 1)) + 720; 
                 geral = Math.floor(Math.random() * (198 - 185 + 1)) + 185;
@@ -377,7 +376,6 @@
                 ponteiro = "8 / 10";
                 atraso = "Curto (0.5s)";
             }
-            // 5. Tratamento para Motorola
             else if (input.includes('MOTOROLA') || input.includes('MOTO')) {
                 dpi = Math.floor(Math.random() * (680 - 580 + 1)) + 580;
                 geral = 198;
@@ -387,7 +385,6 @@
                 ponteiro = "10 / 10";
                 atraso = "Curto (0.5s)";
             }
-            // 6. Outros dispositivos validados
             else {
                 dpi = Math.floor(Math.random() * (650 - 500 + 1)) + 500;
                 geral = Math.floor(Math.random() * (195 - 175 + 1)) + 175;
@@ -398,13 +395,12 @@
                 atraso = "Curto (0.5s)";
             }
 
-            // Garantir que nenhum valor ultrapasse 200 por segurança matemática
             if (mira2x > 200) mira2x = 200;
             if (mira4x > 200) mira4x = 200;
 
             document.getElementById('res-modelo').innerText = "Configurações para: " + input;
             document.getElementById('res-dpi').innerText = dpi;
-            document.getElementById('res-ponteiro').innerText = ponteiro;
+            document.getElementById('res-ponteiro').innerText = pointer = ponteiro;
             document.getElementById('res-atraso').innerText = atraso;
             document.getElementById('res-geral').innerText = geral;
             document.getElementById('res-2x').innerText = mira2x;
@@ -456,13 +452,22 @@
                 return;
             }
 
+            // Lista estendida com mais estilos de nicks impressionantes
             const estilos = [
                 `꧁⚔️ ${base} ⚔️꧂`,
                 `ㅤ${base} ⚡`,
                 `🎯 ${base}•fx`,
                 `☯️ 🅝🅞🅑🅡🅤_${base}`,
                 `亗 ${base} 亗`,
-                `꧁☠️ ${base} ☠️꧂`
+                `꧁☠️ ${base} ☠️꧂`,
+                `⚡ ${base} `,
+                `☁️ ${base} ⚡`,
+                `⛺ ${base} •iPaD`,
+                `⁆ ${base} ⁅ ☯`,
+                `⚡ ${base} ×͜×`,
+                `☂️ ${base} ⚡`,
+                `么 ${base} 亗`,
+                `🌌 ${base} ⚡`
             ];
 
             const container = document.getElementById('lista-nicks');
