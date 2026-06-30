@@ -243,7 +243,7 @@
             <div id="painel-busca">
                 <label for="celular">Digite a Marca ou Modelo:</label>
                 <input type="text" id="celular" placeholder="Ex: Moto G60, Samsung S23, iPhone 13...">
-                <button class="main-btn" onclick="gerarConfiguracaoDinamica()">Gerar Sensi e DPI</button>
+                <button class="main-btn" onclick="generarConfiguracaoDinamica()">Gerar Sensi e DPI</button>
             </div>
 
             <div id="resultado" class="result-box">
@@ -256,9 +256,9 @@
                 <div class="result-item">Atraso ao Tocar e Pressionar: <span id="res-atraso">-</span></div>
                 
                 <div class="section-title">Sensibilidade In-Game (Free Fire)</div>
-                <div class="result-item">Geral: <span id="res-geral" style="color: #00cec9;">-</span></div>
-                <div class="result-item">Mira 2x: <span id="res-2x">-</span></div>
-                <div class="result-item">Mira 4x: <span id="res-4x">-</span></div>
+                <div class="result-item">Geral (Até 200): <span id="res-geral" style="color: #00cec9;">-</span></div>
+                <div class="result-item">Mira 2x (Até 200): <span id="res-2x">-</span></div>
+                <div class="result-item">Mira 4x (Até 200): <span id="res-4x">-</span></div>
                 <div class="result-item">Botão de Atirar: <span id="res-botao" style="color: #ff6b6b;">-</span></div>
             </div>
         </div>
@@ -316,7 +316,7 @@
             event.target.classList.add('active');
         }
 
-        // LÓGICA DA SENSI CALIBRADA POR MARCA
+        // LÓGICA DA SENSI CALIBRADA POR MARCA ATÉ 200
         function gerarConfiguracaoDinamica() {
             const input = document.getElementById('celular').value.trim().toUpperCase();
             const resultadoDiv = document.getElementById('resultado');
@@ -337,42 +337,42 @@
 
             let dpi, geral, mira2x, mira4x, botao, ponteiro, atraso;
 
-            // 1. Tratamento para Apple (iOS)
+            // 1. Tratamento para Apple (iOS) - Escala calibrada até 200
             if (input.includes('IPHONE') || input.includes('APPLE') || input.includes('IPAD')) {
                 dpi = "Padrão iOS (120 Mv)";
-                geral = Math.floor(Math.random() * (100 - 95 + 1)) + 95; // Sensi alta estável no iOS
-                mira2x = Math.floor(geral * 0.94);
-                mira4x = Math.floor(geral * 0.91);
+                geral = Math.floor(Math.random() * (195 - 180 + 1)) + 180; 
+                mira2x = Math.floor(geral * 0.95);
+                mira4x = Math.floor(geral * 0.92);
                 botao = Math.floor(Math.random() * (47 - 42 + 1)) + 42 + "%";
                 ponteiro = "Máxima";
                 atraso = "0,25s";
             } 
             // 2. Tratamento para Samsung de alta performance (Linha S)
             else if (input.includes('S20') || input.includes('S21') || input.includes('S22') || input.includes('S23') || input.includes('S24')) {
-                dpi = Math.floor(Math.random() * (560 - 480 + 1)) + 480; // Telas sensíveis não precisam de DPI extrema
-                geral = Math.floor(Math.random() * (98 - 94 + 1)) + 94;
+                dpi = Math.floor(Math.random() * (560 - 480 + 1)) + 480; 
+                geral = Math.floor(Math.random() * (185 - 170 + 1)) + 170;
                 mira2x = Math.floor(geral * 0.96);
-                mira4x = Math.floor(geral * 0.92);
+                mira4x = Math.floor(geral * 0.93);
                 botao = Math.floor(Math.random() * (52 - 46 + 1)) + 46 + "%";
                 ponteiro = "7 / 10";
                 atraso = "Curto (0.5s)";
             }
             // 3. Tratamento Geral para Samsung (Linhas A e M)
             else if (input.includes('SAMSUNG') || input.includes('GALAXY')) {
-                dpi = Math.floor(Math.random() * (780 - 640 + 1)) + 640; // Telas intermediárias exigem mais DPI
-                geral = 100; // Trava no máximo para compensar o peso da tela
-                mira2x = 98;
-                mira4x = 95;
+                dpi = Math.floor(Math.random() * (780 - 640 + 1)) + 640; 
+                geral = 200; // Máximo na nova escala para compensar a tela pesada
+                mira2x = 196;
+                mira4x = 192;
                 botao = Math.floor(Math.random() * (48 - 43 + 1)) + 43 + "%";
                 ponteiro = "9 / 10";
                 atraso = "Curto (0.5s)";
             }
             // 4. Tratamento para Xiaomi / Poco / Redmi
             else if (input.includes('XIAOMI') || input.includes('POCO') || input.includes('REDMI')) {
-                dpi = Math.floor(Math.random() * (890 - 720 + 1)) + 720; // Excelente resposta a DPIs altas
-                geral = Math.floor(Math.random() * (99 - 95 + 1)) + 95;
+                dpi = Math.floor(Math.random() * (890 - 720 + 1)) + 720; 
+                geral = Math.floor(Math.random() * (198 - 185 + 1)) + 185;
                 mira2x = Math.floor(geral * 0.97);
-                mira4x = Math.floor(geral * 0.93);
+                mira4x = Math.floor(geral * 0.94);
                 botao = Math.floor(Math.random() * (50 - 44 + 1)) + 44 + "%";
                 ponteiro = "8 / 10";
                 atraso = "Curto (0.5s)";
@@ -380,23 +380,27 @@
             // 5. Tratamento para Motorola
             else if (input.includes('MOTOROLA') || input.includes('MOTO')) {
                 dpi = Math.floor(Math.random() * (680 - 580 + 1)) + 580;
-                geral = 99;
-                mira2x = 96;
-                mira4x = 92;
+                geral = 198;
+                mira2x = 194;
+                mira4x = 190;
                 botao = Math.floor(Math.random() * (53 - 47 + 1)) + 47 + "%";
                 ponteiro = "10 / 10";
                 atraso = "Curto (0.5s)";
             }
-            // 6. Outros dispositivos validados (Realme, Infinix, ASUS, etc.)
+            // 6. Outros dispositivos validados
             else {
                 dpi = Math.floor(Math.random() * (650 - 500 + 1)) + 500;
-                geral = Math.floor(Math.random() * (100 - 94 + 1)) + 94;
+                geral = Math.floor(Math.random() * (195 - 175 + 1)) + 175;
                 mira2x = Math.floor(geral * 0.95);
                 mira4x = Math.floor(geral * 0.92);
                 botao = Math.floor(Math.random() * (50 - 45 + 1)) + 45 + "%";
                 ponteiro = "8 / 10";
                 atraso = "Curto (0.5s)";
             }
+
+            // Garantir que nenhum valor ultrapasse 200 por segurança matemática
+            if (mira2x > 200) mira2x = 200;
+            if (mira4x > 200) mira4x = 200;
 
             document.getElementById('res-modelo').innerText = "Configurações para: " + input;
             document.getElementById('res-dpi').innerText = dpi;
