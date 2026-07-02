@@ -157,18 +157,6 @@
             text-transform: uppercase;
         }
 
-        .btn-variar {
-            background-color: #ff9f43;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            color: #121214;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-
         .result-box h3 {
             color: #ff9f43;
             margin-bottom: 15px;
@@ -267,7 +255,6 @@
             <div id="resultado" class="result-box">
                 <div class="botoes-topo">
                     <button class="btn-voltar" onclick="voltarMenu()">← Voltar</button>
-                    <button class="btn-variar" onclick="gerarConfiguracaoDinamica()">Variar Sensi ⚡</button>
                 </div>
                 <h3 id="res-modelo">Buscando...</h3>
 
@@ -350,7 +337,6 @@
                 return;
             }
 
-            // Adicionadas as tags TABLET e IPAD para identificação universal
             const marcasValidas = ['SAMSUNG', 'MOTOROLA', 'MOTO', 'XIAOMI', 'POCO', 'REDMI', 'IPHONE', 'APPLE', 'IPAD', 'INFINIX', 'REALME', 'ASUS', 'VIVO', 'LG', 'GALAXY', 'TABLET', 'TAB'];
             const marcaValidaEncontrada = marcasValidas.some(marca => input.includes(marca));
 
@@ -361,73 +347,75 @@
 
             let dpi, geral, mira2x, mira4x, botao, ponteiro, atraso;
 
-            // REGRA PARA TABLETS GERAIS OU IPADS (Telas grandes exigem botões menores/médios e sensibilidade menor/estabilizada)
+            // Algoritmo calibrado gerando valores de 0 a 200 equilibrados de forma randômica
             if (input.includes('TABLET') || input.includes('IPAD') || input.includes('TAB')) {
-                dpi = input.includes('IPAD') ? "Padrão iPadOS" : Math.floor(Math.random() * (410 - 320 + 1)) + 320; 
-                geral = Math.floor(Math.random() * (130 - 95 + 1)) + 95; // Sensi de tablet costuma ser menor
-                mira2x = Math.floor(geral * 0.94);
-                mira4x = Math.floor(geral * 0.91);
-                botao = Math.floor(Math.random() * (38 - 32 + 1)) + 32 + "%"; // Botões menores para telas grandes
+                dpi = input.includes('IPAD') ? "Padrão iPadOS" : Math.floor(Math.random() * (440 - 360 + 1)) + 360; 
+                geral = Math.floor(Math.random() * (145 - 110 + 1)) + 110; 
+                mira2x = Math.floor(geral * 0.95);
+                mira4x = Math.floor(geral * 0.92);
+                botao = Math.floor(Math.random() * (40 - 34 + 1)) + 34 + "%";
                 ponteiro = "Máxima ou 8/10";
                 atraso = "0,25s (Curto)";
             }
             else if (input.includes('IPHONE') || input.includes('APPLE')) {
                 dpi = "Padrão iOS (120 Mv)";
-                geral = Math.floor(Math.random() * (195 - 180 + 1)) + 180; 
-                mira2x = Math.floor(geral * 0.95);
-                mira4x = Math.floor(geral * 0.92);
-                botao = Math.floor(Math.random() * (47 - 42 + 1)) + 42 + "%";
+                geral = Math.floor(Math.random() * (198 - 182 + 1)) + 182; 
+                mira2x = Math.floor(geral * 0.96);
+                mira4x = Math.floor(geral * 0.94);
+                botao = Math.floor(Math.random() * (46 - 41 + 1)) + 41 + "%";
                 ponteiro = "Máxima";
                 atraso = "0,25s";
             } 
             else if (input.includes('S20') || input.includes('S21') || input.includes('S22') || input.includes('S23') || input.includes('S24')) {
-                dpi = Math.floor(Math.random() * (560 - 480 + 1)) + 480; 
-                geral = Math.floor(Math.random() * (185 - 170 + 1)) + 170;
-                mira2x = Math.floor(geral * 0.96);
+                dpi = Math.floor(Math.random() * (580 - 450 + 1)) + 450; 
+                geral = Math.floor(Math.random() * (188 - 172 + 1)) + 172;
+                mira2x = Math.floor(geral * 0.95);
                 mira4x = Math.floor(geral * 0.93);
-                botao = Math.floor(Math.random() * (52 - 46 + 1)) + 46 + "%";
+                botao = Math.floor(Math.random() * (50 - 45 + 1)) + 45 + "%";
                 ponteiro = "7 / 10";
                 atraso = "Curto (0.5s)";
             }
             else if (input.includes('SAMSUNG') || input.includes('GALAXY')) {
-                dpi = Math.floor(Math.random() * (780 - 640 + 1)) + 640; 
-                geral = 200; 
-                mira2x = Math.floor(Math.random() * (200 - 190 + 1)) + 190;
-                mira4x = Math.floor(Math.random() * (198 - 188 + 1)) + 188;
-                botao = Math.floor(Math.random() * (48 - 43 + 1)) + 43 + "%";
+                dpi = Math.floor(Math.random() * (820 - 680 + 1)) + 680; 
+                geral = Math.floor(Math.random() * (200 - 185 + 1)) + 185; 
+                mira2x = Math.floor(geral * 0.96);
+                mira4x = Math.floor(geral * 0.93);
+                botao = Math.floor(Math.random() * (49 - 44 + 1)) + 44 + "%";
                 ponteiro = "9 / 10";
                 atraso = "Curto (0.5s)";
             }
             else if (input.includes('XIAOMI') || input.includes('POCO') || input.includes('REDMI')) {
-                dpi = Math.floor(Math.random() * (890 - 720 + 1)) + 720; 
-                geral = Math.floor(Math.random() * (198 - 185 + 1)) + 185;
-                mira2x = Math.floor(geral * 0.97);
+                dpi = Math.floor(Math.random() * (860 - 740 + 1)) + 740; 
+                geral = Math.floor(Math.random() * (199 - 186 + 1)) + 186;
+                mira2x = Math.floor(geral * 0.96);
                 mira4x = Math.floor(geral * 0.94);
-                botao = Math.floor(Math.random() * (50 - 44 + 1)) + 44 + "%";
+                botao = Math.floor(Math.random() * (49 - 43 + 1)) + 43 + "%";
                 ponteiro = "8 / 10";
                 atraso = "Curto (0.5s)";
             }
             else if (input.includes('MOTOROLA') || input.includes('MOTO')) {
-                dpi = Math.floor(Math.random() * (680 - 580 + 1)) + 580;
-                geral = Math.floor(Math.random() * (200 - 190 + 1)) + 190;
-                mira2x = Math.floor(geral * 0.96);
-                mira4x = Math.floor(geral * 0.93);
-                botao = Math.floor(Math.random() * (53 - 47 + 1)) + 47 + "%";
+                dpi = Math.floor(Math.random() * (720 - 590 + 1)) + 590;
+                geral = Math.floor(Math.random() * (200 - 188 + 1)) + 188;
+                mira2x = Math.floor(geral * 0.95);
+                mira4x = Math.floor(geral * 0.92);
+                botao = Math.floor(Math.random() * (52 - 46 + 1)) + 46 + "%";
                 ponteiro = "10 / 10";
                 atraso = "Curto (0.5s)";
             }
             else {
-                dpi = Math.floor(Math.random() * (650 - 500 + 1)) + 500;
-                geral = Math.floor(Math.random() * (195 - 175 + 1)) + 175;
+                dpi = Math.floor(Math.random() * (680 - 520 + 1)) + 520;
+                geral = Math.floor(Math.random() * (196 - 176 + 1)) + 176;
                 mira2x = Math.floor(geral * 0.95);
                 mira4x = Math.floor(geral * 0.92);
-                botao = Math.floor(Math.random() * (50 - 45 + 1)) + 45 + "%";
+                botao = Math.floor(Math.random() * (51 - 44 + 1)) + 44 + "%";
                 ponteiro = "8 / 10";
                 atraso = "Curto (0.5s)";
             }
 
-            if (mira2x > 200) mira2x = 200;
-            if (mira4x > 200) mira4x = 200;
+            // Segurança estrita para travar os limites oficiais in-game de 0 a 200
+            if (geral > 200) geral = 200; if (geral < 0) geral = 0;
+            if (mira2x > 200) mira2x = 200; if (mira2x < 0) mira2x = 0;
+            if (mira4x > 200) mira4x = 200; if (mira4x < 0) mira4x = 0;
 
             document.getElementById('res-modelo').innerText = "Configurações para: " + input;
             document.getElementById('res-dpi').innerText = dpi;
