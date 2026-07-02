@@ -123,6 +123,7 @@
             cursor: pointer;
             text-transform: uppercase;
             transition: 0.2s;
+            margin-bottom: 10px;
         }
 
         button.main-btn:hover {
@@ -139,15 +140,32 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
+        .botoes-topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
         .btn-voltar {
-            display: inline-block;
             background: none;
             border: none;
             color: #ff9f43;
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .btn-variar {
+            background-color: #ff9f43;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            color: #121214;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
             text-transform: uppercase;
         }
 
@@ -242,23 +260,26 @@
         <div id="tab-sensi" class="app-box active">
             <div id="painel-busca">
                 <label for="celular">Digite a Marca ou Modelo:</label>
-                <input type="text" id="celular" placeholder="Ex: Moto G60, Samsung S23, iPhone 13...">
+                <input type="text" id="celular" placeholder="Ex: Moto G60, Samsung S23, Tablet Tab S9, iPad...">
                 <button class="main-btn" onclick="gerarConfiguracaoDinamica()">Gerar Sensi e DPI</button>
             </div>
 
             <div id="resultado" class="result-box">
-                <button class="btn-voltar" onclick="voltarMenu()">← Voltar</button>
+                <div class="botoes-topo">
+                    <button class="btn-voltar" onclick="voltarMenu()">← Voltar</button>
+                    <button class="btn-variar" onclick="gerarConfiguracaoDinamica()">Variar Sensi ⚡</button>
+                </div>
                 <h3 id="res-modelo">Buscando...</h3>
 
-                <div class="section-title">Configurações do Celular (Sistema)</div>
+                <div class="section-title">Configurações do Dispositivo (Sistema)</div>
                 <div class="result-item">DPI do Sistema: <span id="res-dpi" style="color: #ff9f43;">-</span></div>
                 <div class="result-item">Velocidade do Ponteiro: <span id="res-ponteiro">-</span></div>
                 <div class="result-item">Atraso ao Tocar e Pressionar: <span id="res-atraso">-</span></div>
                 
                 <div class="section-title">Sensibilidade In-Game (Free Fire)</div>
-                <div class="result-item">Geral (0-200): <span id="res-geral" style="color: #00cec9;">-</span></div>
-                <div class="result-item">Mira 2x (0-200): <span id="res-2x">-</span></div>
-                <div class="result-item">Mira 4x (0-200): <span id="res-4x">-</span></div>
+                <div class="result-item">Geral (Até 200): <span id="res-geral" style="color: #00cec9;">-</span></div>
+                <div class="result-item">Mira 2x (Até 200): <span id="res-2x">-</span></div>
+                <div class="result-item">Mira 4x (Até 200): <span id="res-4x">-</span></div>
                 <div class="result-item">Botão de Atirar: <span id="res-botao" style="color: #ff6b6b;">-</span></div>
             </div>
         </div>
@@ -313,12 +334,12 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             
             document.getElementById(tabId).classList.add('active');
+            
             if (event && event.target) {
                 event.target.classList.add('active');
             }
         }
 
-        // NOVA LÓGICA DE CALIBRAÇÃO EXATA E VARIÁVEL DE 0 A 200
         function gerarConfiguracaoDinamica() {
             const input = document.getElementById('celular').value.trim().toUpperCase();
             const resultadoDiv = document.getElementById('resultado');
@@ -329,49 +350,82 @@
                 return;
             }
 
-            const marcasValidas = ['SAMSUNG', 'MOTOROLA', 'MOTO', 'XIAOMI', 'POCO', 'REDMI', 'IPHONE', 'APPLE', 'IPAD', 'INFINIX', 'REALME', 'ASUS', 'VIVO', 'LG', 'GALAXY'];
+            // Adicionadas as tags TABLET e IPAD para identificação universal
+            const marcasValidas = ['SAMSUNG', 'MOTOROLA', 'MOTO', 'XIAOMI', 'POCO', 'REDMI', 'IPHONE', 'APPLE', 'IPAD', 'INFINIX', 'REALME', 'ASUS', 'VIVO', 'LG', 'GALAXY', 'TABLET', 'TAB'];
             const marcaValidaEncontrada = marcasValidas.some(marca => input.includes(marca));
 
             if (!marcaValidaEncontrada) {
-                alert("Celular não reconhecido! Digite uma marca válida (Ex: Samsung, Motorola, Xiaomi, iPhone...)");
+                alert("Dispositivo não reconhecido! Digite uma marca válida ou especifique se é um Tablet/iPad.");
                 return;
             }
 
             let dpi, geral, mira2x, mira4x, botao, ponteiro, atraso;
 
-            // Define faixas de DPI de acordo com a marca do aparelho
-            if (input.includes('IPHONE') || input.includes('APPLE') || input.includes('IPAD')) {
+            // REGRA PARA TABLETS GERAIS OU IPADS (Telas grandes exigem botões menores/médios e sensibilidade menor/estabilizada)
+            if (input.includes('TABLET') || input.includes('IPAD') || input.includes('TAB')) {
+                dpi = input.includes('IPAD') ? "Padrão iPadOS" : Math.floor(Math.random() * (410 - 320 + 1)) + 320; 
+                geral = Math.floor(Math.random() * (130 - 95 + 1)) + 95; // Sensi de tablet costuma ser menor
+                mira2x = Math.floor(geral * 0.94);
+                mira4x = Math.floor(geral * 0.91);
+                botao = Math.floor(Math.random() * (38 - 32 + 1)) + 32 + "%"; // Botões menores para telas grandes
+                ponteiro = "Máxima ou 8/10";
+                atraso = "0,25s (Curto)";
+            }
+            else if (input.includes('IPHONE') || input.includes('APPLE')) {
                 dpi = "Padrão iOS (120 Mv)";
-                // iOS varia livremente em uma escala alta equilibrada
-                geral = Math.floor(Math.random() * (190 - 110 + 1)) + 110; 
+                geral = Math.floor(Math.random() * (195 - 180 + 1)) + 180; 
+                mira2x = Math.floor(geral * 0.95);
+                mira4x = Math.floor(geral * 0.92);
+                botao = Math.floor(Math.random() * (47 - 42 + 1)) + 42 + "%";
                 ponteiro = "Máxima";
                 atraso = "0,25s";
-            } else {
-                // Sorteia uma DPI bem variada para Android entre 410 e 960 (ex: 748)
-                dpi = Math.floor(Math.random() * (960 - 410 + 1)) + 410;
-                
-                // CÁLCULO PROPORCIONAL: Quanto maior a DPI, mais ajustada fica a Geral para não pinar
-                // Isso permite que o valor varie de 0 a 200 dependendo da DPI gerada!
-                let fatorBase = (960 - dpi) / 550; // Gera um multiplicador dinâmico
-                geral = Math.floor(100 + (fatorBase * 90)); 
-                
-                // Adiciona uma pequena variação para dar aleatoriedade e calibração fina
-                geral += Math.floor(Math.random() * (15 - (-15) + 1)) - 15;
-                
-                // Proteção para manter rigorosamente dentro do limite de 0 a 200
-                if (geral > 200) geral = 200;
-                if (geral < 40) geral = 85; 
-
-                ponteiro = Math.floor(Math.random() * (10 - 6 + 1)) + 6 + " / 10";
+            } 
+            else if (input.includes('S20') || input.includes('S21') || input.includes('S22') || input.includes('S23') || input.includes('S24')) {
+                dpi = Math.floor(Math.random() * (560 - 480 + 1)) + 480; 
+                geral = Math.floor(Math.random() * (185 - 170 + 1)) + 170;
+                mira2x = Math.floor(geral * 0.96);
+                mira4x = Math.floor(geral * 0.93);
+                botao = Math.floor(Math.random() * (52 - 46 + 1)) + 46 + "%";
+                ponteiro = "7 / 10";
+                atraso = "Curto (0.5s)";
+            }
+            else if (input.includes('SAMSUNG') || input.includes('GALAXY')) {
+                dpi = Math.floor(Math.random() * (780 - 640 + 1)) + 640; 
+                geral = 200; 
+                mira2x = Math.floor(Math.random() * (200 - 190 + 1)) + 190;
+                mira4x = Math.floor(Math.random() * (198 - 188 + 1)) + 188;
+                botao = Math.floor(Math.random() * (48 - 43 + 1)) + 43 + "%";
+                ponteiro = "9 / 10";
+                atraso = "Curto (0.5s)";
+            }
+            else if (input.includes('XIAOMI') || input.includes('POCO') || input.includes('REDMI')) {
+                dpi = Math.floor(Math.random() * (890 - 720 + 1)) + 720; 
+                geral = Math.floor(Math.random() * (198 - 185 + 1)) + 185;
+                mira2x = Math.floor(geral * 0.97);
+                mira4x = Math.floor(geral * 0.94);
+                botao = Math.floor(Math.random() * (50 - 44 + 1)) + 44 + "%";
+                ponteiro = "8 / 10";
+                atraso = "Curto (0.5s)";
+            }
+            else if (input.includes('MOTOROLA') || input.includes('MOTO')) {
+                dpi = Math.floor(Math.random() * (680 - 580 + 1)) + 580;
+                geral = Math.floor(Math.random() * (200 - 190 + 1)) + 190;
+                mira2x = Math.floor(geral * 0.96);
+                mira4x = Math.floor(geral * 0.93);
+                botao = Math.floor(Math.random() * (53 - 47 + 1)) + 47 + "%";
+                ponteiro = "10 / 10";
+                atraso = "Curto (0.5s)";
+            }
+            else {
+                dpi = Math.floor(Math.random() * (650 - 500 + 1)) + 500;
+                geral = Math.floor(Math.random() * (195 - 175 + 1)) + 175;
+                mira2x = Math.floor(geral * 0.95);
+                mira4x = Math.floor(geral * 0.92);
+                botao = Math.floor(Math.random() * (50 - 45 + 1)) + 45 + "%";
+                ponteiro = "8 / 10";
                 atraso = "Curto (0.5s)";
             }
 
-            // Calibração proporcional e matemática para as miras secundárias baseadas na Geral
-            mira2x = Math.floor(geral * 0.94);
-            mira4x = Math.floor(geral * 0.89);
-            botao = Math.floor(Math.random() * (56 - 42 + 1)) + 42 + "%";
-
-            // Garante que as sub-miras não estourem o limite
             if (mira2x > 200) mira2x = 200;
             if (mira4x > 200) mira4x = 200;
 
@@ -438,12 +492,9 @@
                 `꧁☠️ ${base} ☠️꧂`,
                 `⚡ ${base} `,
                 `☁️ ${base} ⚡`,
-                `⛺ ${base} •iPaD`,
-                `⁆ ${base} ⁅ ☯`,
                 `⚡ ${base} ×͜×`,
                 `☂️ ${base} ⚡`,
-                `么 ${base} 亗`,
-                `🌌 ${base} ⚡`
+                `☂️ ${base} 亗`
             ];
 
             const container = document.getElementById('lista-nicks');
@@ -462,7 +513,7 @@
 
         function copiarTexto(texto) {
             navigator.clipboard.writeText(texto);
-            alert("Nick copiado para a área de transferência!");
+            alert("Nick copiado!");
         }
     </script>
 </body>
