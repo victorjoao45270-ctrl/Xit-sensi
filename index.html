@@ -339,35 +339,26 @@
 
             let dpi, geral, reddot, mira2x, mira4x, botao, ponteiro, atraso;
 
-            // 1. GERAÇÃO DA DPI TOTALMENTE DINÂMICA E AMPLA
             if (input.includes('TABLET') || input.includes('IPAD') || input.includes('TAB')) {
                 dpi = input.includes('IPAD') ? "Padrão iPadOS" : Math.floor(Math.random() * (500 - 340 + 1)) + 340;
             } else if (input.includes('IPHONE') || input.includes('APPLE')) {
                 dpi = "Padrão iOS (120 Mv)";
             } else {
-                dpi = Math.floor(Math.random() * (960 - 410 + 1)) + 410; // Varia livremente de 410 a 960
+                dpi = Math.floor(Math.random() * (960 - 410 + 1)) + 410;
             }
 
-            // 2. CALIBRAÇÃO INVERSA REAL (Escala cheia de 0 a 200 baseada na DPI)
             if (input.includes('IPHONE') || input.includes('APPLE') || input.includes('IPAD')) {
-                // Dispositivos Apple usam sensibilidades médias-altas calibradas por toque nativo
                 geral = Math.floor(Math.random() * (165 - 90 + 1)) + 90; 
                 ponteiro = "Máxima";
                 atraso = "0,25s";
                 botao = Math.floor(Math.random() * (45 - 35 + 1)) + 35 + "%";
             } else {
-                // SISTEMA ANDROID & TABLETS ANDROID:
-                // Se a DPI for 748, a proporção exata joga a Geral perto de 137 automaticamente!
-                let maxDpi Permitida = 960;
+                let maxDpiPermitida = 960;
                 let minDpiPermitida = 410;
                 
-                // Mapeia inversamente a DPI de 410-960 diretamente para a escala cheia de 0 a 200
                 let porcentagemDpi = (dpi - minDpiPermitida) / (maxDpiPermitida - minDpiPermitida);
                 
-                // Quanto maior a DPI, menor a sensibilidade geral (Calibração matemática perfeita)
                 geral = Math.floor(200 - (porcentagemDpi * 170)); 
-                
-                // Pequena variação sutil de micro-ajuste para calibração fina (+- 4)
                 geral += Math.floor(Math.random() * 9) - 4;
 
                 ponteiro = Math.floor(Math.random() * (10 - 5 + 1)) + 5 + " / 10";
@@ -375,16 +366,13 @@
                 botao = Math.floor(Math.random() * (55 - 42 + 1)) + 42 + "%";
             }
 
-            // Trava de segurança absoluta de 0 a 200
             if (geral > 200) geral = 200;
             if (geral < 0) geral = 0;
 
-            // 3. DISTRIBUIÇÃO CALIBRADA DAS OUTRAS MIRAS E PONTO VERMELHO (Sempre acompanhando a Geral)
             reddot = Math.floor(geral * 0.98);
             mira2x = Math.floor(geral * 0.94);
             mira4x = Math.floor(geral * 0.89);
 
-            // Evita que as sub-miras quebrem as regras do jogo
             if (reddot > 200) reddot = 200; if (reddot < 0) reddot = 0;
             if (mira2x > 200) mira2x = 200; if (mira2x < 0) mira2x = 0;
             if (mira4x > 200) mira4x = 200; if (mira4x < 0) mira4x = 0;
