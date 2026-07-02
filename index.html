@@ -123,7 +123,6 @@
             cursor: pointer;
             text-transform: uppercase;
             transition: 0.2s;
-            margin-bottom: 10px;
         }
 
         button.main-btn:hover {
@@ -140,20 +139,15 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
-        .botoes-topo {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
         .btn-voltar {
+            display: inline-block;
             background: none;
             border: none;
             color: #ff9f43;
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
+            margin-bottom: 15px;
             text-transform: uppercase;
         }
 
@@ -253,9 +247,7 @@
             </div>
 
             <div id="resultado" class="result-box">
-                <div class="botoes-topo">
-                    <button class="btn-voltar" onclick="voltarMenu()">← Voltar</button>
-                </div>
+                <button class="btn-voltar" onclick="voltarMenu()">← Voltar</button>
                 <h3 id="res-modelo">Buscando...</h3>
 
                 <div class="section-title">Configurações do Dispositivo (Sistema)</div>
@@ -264,9 +256,10 @@
                 <div class="result-item">Atraso ao Tocar e Pressionar: <span id="res-atraso">-</span></div>
                 
                 <div class="section-title">Sensibilidade In-Game (Free Fire)</div>
-                <div class="result-item">Geral (Até 200): <span id="res-geral" style="color: #00cec9;">-</span></div>
-                <div class="result-item">Mira 2x (Até 200): <span id="res-2x">-</span></div>
-                <div class="result-item">Mira 4x (Até 200): <span id="res-4x">-</span></div>
+                <div class="result-item">Geral (0-200): <span id="res-geral" style="color: #00cec9;">-</span></div>
+                <div class="result-item">Ponto Vermelho (0-200): <span id="res-reddot" style="color: #ff9f43;">-</span></div>
+                <div class="result-item">Mira 2x (0-200): <span id="res-2x">-</span></div>
+                <div class="result-item">Mira 4x (0-200): <span id="res-4x">-</span></div>
                 <div class="result-item">Botão de Atirar: <span id="res-botao" style="color: #ff6b6b;">-</span></div>
             </div>
         </div>
@@ -321,7 +314,6 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             
             document.getElementById(tabId).classList.add('active');
-            
             if (event && event.target) {
                 event.target.classList.add('active');
             }
@@ -337,6 +329,7 @@
                 return;
             }
 
+            // Suporte expandido para incluir TABLET e TAB de forma universal
             const marcasValidas = ['SAMSUNG', 'MOTOROLA', 'MOTO', 'XIAOMI', 'POCO', 'REDMI', 'IPHONE', 'APPLE', 'IPAD', 'INFINIX', 'REALME', 'ASUS', 'VIVO', 'LG', 'GALAXY', 'TABLET', 'TAB'];
             const marcaValidaEncontrada = marcasValidas.some(marca => input.includes(marca));
 
@@ -345,75 +338,54 @@
                 return;
             }
 
-            let dpi, geral, mira2x, mira4x, botao, ponteiro, atraso;
+            let dpi, geral, reddot, mira2x, mira4x, botao, ponteiro, atraso;
 
-            // Algoritmo calibrado gerando valores de 0 a 200 equilibrados de forma randômica
+            // Identificação de Tablets/iPads ou dispositivos móveis tradicionais
             if (input.includes('TABLET') || input.includes('IPAD') || input.includes('TAB')) {
-                dpi = input.includes('IPAD') ? "Padrão iPadOS" : Math.floor(Math.random() * (440 - 360 + 1)) + 360; 
-                geral = Math.floor(Math.random() * (145 - 110 + 1)) + 110; 
-                mira2x = Math.floor(geral * 0.95);
-                mira4x = Math.floor(geral * 0.92);
-                botao = Math.floor(Math.random() * (40 - 34 + 1)) + 34 + "%";
-                ponteiro = "Máxima ou 8/10";
+                // Tablets possuem telas maiores, necessitando de sensibilidades menores e botões ajustados
+                dpi = input.includes('IPAD') ? "Padrão iPadOS" : Math.floor(Math.random() * (460 - 360 + 1)) + 360;
+                
+                // Calibração matemática inversamente proporcional estável para tablets
+                let numDpi = input.includes('IPAD') ? 400 : dpi;
+                let fatorBase = (460 - numDpi) / 100; 
+                geral = Math.floor(95 + (fatorBase * 25)) + (Math.floor(Math.random() * 11) - 5);
+                
+                ponteiro = "Máxima";
                 atraso = "0,25s (Curto)";
-            }
-            else if (input.includes('IPHONE') || input.includes('APPLE')) {
+                botao = Math.floor(Math.random() * (39 - 33 + 1)) + 33 + "%";
+            } else if (input.includes('IPHONE') || input.includes('APPLE')) {
                 dpi = "Padrão iOS (120 Mv)";
-                geral = Math.floor(Math.random() * (198 - 182 + 1)) + 182; 
-                mira2x = Math.floor(geral * 0.96);
-                mira4x = Math.floor(geral * 0.94);
-                botao = Math.floor(Math.random() * (46 - 41 + 1)) + 41 + "%";
+                geral = Math.floor(Math.random() * (195 - 172 + 1)) + 172; 
                 ponteiro = "Máxima";
                 atraso = "0,25s";
-            } 
-            else if (input.includes('S20') || input.includes('S21') || input.includes('S22') || input.includes('S23') || input.includes('S24')) {
-                dpi = Math.floor(Math.random() * (580 - 450 + 1)) + 450; 
-                geral = Math.floor(Math.random() * (188 - 172 + 1)) + 172;
-                mira2x = Math.floor(geral * 0.95);
-                mira4x = Math.floor(geral * 0.93);
-                botao = Math.floor(Math.random() * (50 - 45 + 1)) + 45 + "%";
-                ponteiro = "7 / 10";
+                botao = Math.floor(Math.random() * (47 - 41 + 1)) + 41 + "%";
+            } else {
+                // Sorteia uma DPI Android estável
+                dpi = Math.floor(Math.random() * (920 - 410 + 1)) + 410;
+                
+                // CALIBRAÇÃO MATEMÁTICA PURA (Ex: Se a DPI for alta perto de 748, a Geral diminui proporcionalmente para ~137)
+                let taxaProporcional = (920 - dpi) / (920 - 410); 
+                geral = Math.floor(100 + (taxaProporcional * 85)); 
+                
+                // Adiciona refinamento sutil de variação para não fixar o mesmo número exato
+                geral += Math.floor(Math.random() * (7 - (-7) + 1)) - 7;
+
+                ponteiro = Math.floor(Math.random() * (10 - 7 + 1)) + 7 + " / 10";
                 atraso = "Curto (0.5s)";
-            }
-            else if (input.includes('SAMSUNG') || input.includes('GALAXY')) {
-                dpi = Math.floor(Math.random() * (820 - 680 + 1)) + 680; 
-                geral = Math.floor(Math.random() * (200 - 185 + 1)) + 185; 
-                mira2x = Math.floor(geral * 0.96);
-                mira4x = Math.floor(geral * 0.93);
-                botao = Math.floor(Math.random() * (49 - 44 + 1)) + 44 + "%";
-                ponteiro = "9 / 10";
-                atraso = "Curto (0.5s)";
-            }
-            else if (input.includes('XIAOMI') || input.includes('POCO') || input.includes('REDMI')) {
-                dpi = Math.floor(Math.random() * (860 - 740 + 1)) + 740; 
-                geral = Math.floor(Math.random() * (199 - 186 + 1)) + 186;
-                mira2x = Math.floor(geral * 0.96);
-                mira4x = Math.floor(geral * 0.94);
-                botao = Math.floor(Math.random() * (49 - 43 + 1)) + 43 + "%";
-                ponteiro = "8 / 10";
-                atraso = "Curto (0.5s)";
-            }
-            else if (input.includes('MOTOROLA') || input.includes('MOTO')) {
-                dpi = Math.floor(Math.random() * (720 - 590 + 1)) + 590;
-                geral = Math.floor(Math.random() * (200 - 188 + 1)) + 188;
-                mira2x = Math.floor(geral * 0.95);
-                mira4x = Math.floor(geral * 0.92);
-                botao = Math.floor(Math.random() * (52 - 46 + 1)) + 46 + "%";
-                ponteiro = "10 / 10";
-                atraso = "Curto (0.5s)";
-            }
-            else {
-                dpi = Math.floor(Math.random() * (680 - 520 + 1)) + 520;
-                geral = Math.floor(Math.random() * (196 - 176 + 1)) + 176;
-                mira2x = Math.floor(geral * 0.95);
-                mira4x = Math.floor(geral * 0.92);
-                botao = Math.floor(Math.random() * (51 - 44 + 1)) + 44 + "%";
-                ponteiro = "8 / 10";
-                atraso = "Curto (0.5s)";
+                botao = Math.floor(Math.random() * (54 - 44 + 1)) + 44 + "%";
             }
 
-            // Segurança estrita para travar os limites oficiais in-game de 0 a 200
-            if (geral > 200) geral = 200; if (geral < 0) geral = 0;
+            // Garante travas de segurança rígidas de 0 a 200 na Geral antes de computar as sub-miras
+            if (geral > 200) geral = 200;
+            if (geral < 0) geral = 0;
+
+            // Distribuição calibrada com base na Geral gerada
+            reddot = Math.floor(geral * 0.97) + (Math.floor(Math.random() * 5) - 2);
+            mira2x = Math.floor(geral * 0.94) + (Math.floor(Math.random() * 4) - 2);
+            mira4x = Math.floor(geral * 0.89) + (Math.floor(Math.random() * 4) - 2);
+
+            // Garante que nenhuma mira ultrapasse as barreiras do jogo (0-200)
+            if (reddot > 200) reddot = 200; if (reddot < 0) reddot = 0;
             if (mira2x > 200) mira2x = 200; if (mira2x < 0) mira2x = 0;
             if (mira4x > 200) mira4x = 200; if (mira4x < 0) mira4x = 0;
 
@@ -422,6 +394,7 @@
             document.getElementById('res-ponteiro').innerText = ponteiro;
             document.getElementById('res-atraso').innerText = atraso;
             document.getElementById('res-geral').innerText = geral;
+            document.getElementById('res-reddot').innerText = reddot;
             document.getElementById('res-2x').innerText = mira2x;
             document.getElementById('res-4x').innerText = mira4x;
             document.getElementById('res-botao').innerText = botao;
@@ -480,9 +453,12 @@
                 `꧁☠️ ${base} ☠️꧂`,
                 `⚡ ${base} `,
                 `☁️ ${base} ⚡`,
+                `⛺ ${base} •iPaD`,
+                `⁆ ${base} ⁅ ☯`,
                 `⚡ ${base} ×͜×`,
                 `☂️ ${base} ⚡`,
-                `☂️ ${base} 亗`
+                `么 ${base} 亗`,
+                `🌌 ${base} ⚡`
             ];
 
             const container = document.getElementById('lista-nicks');
@@ -501,7 +477,7 @@
 
         function copiarTexto(texto) {
             navigator.clipboard.writeText(texto);
-            alert("Nick copiado!");
+            alert("Nick copiado para a área de transferência!");
         }
     </script>
 </body>
