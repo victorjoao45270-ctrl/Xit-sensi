@@ -329,7 +329,6 @@
                 return;
             }
 
-            // Suporte expandido para incluir TABLET e TAB de forma universal
             const marcasValidas = ['SAMSUNG', 'MOTOROLA', 'MOTO', 'XIAOMI', 'POCO', 'REDMI', 'IPHONE', 'APPLE', 'IPAD', 'INFINIX', 'REALME', 'ASUS', 'VIVO', 'LG', 'GALAXY', 'TABLET', 'TAB'];
             const marcaValidaEncontrada = marcasValidas.some(marca => input.includes(marca));
 
@@ -340,51 +339,52 @@
 
             let dpi, geral, reddot, mira2x, mira4x, botao, ponteiro, atraso;
 
-            // Identificação de Tablets/iPads ou dispositivos móveis tradicionais
+            // 1. GERAÇÃO DA DPI TOTALMENTE DINÂMICA E AMPLA
             if (input.includes('TABLET') || input.includes('IPAD') || input.includes('TAB')) {
-                // Tablets possuem telas maiores, necessitando de sensibilidades menores e botões ajustados
-                dpi = input.includes('IPAD') ? "Padrão iPadOS" : Math.floor(Math.random() * (460 - 360 + 1)) + 360;
-                
-                // Calibração matemática inversamente proporcional estável para tablets
-                let numDpi = input.includes('IPAD') ? 400 : dpi;
-                let fatorBase = (460 - numDpi) / 100; 
-                geral = Math.floor(95 + (fatorBase * 25)) + (Math.floor(Math.random() * 11) - 5);
-                
-                ponteiro = "Máxima";
-                atraso = "0,25s (Curto)";
-                botao = Math.floor(Math.random() * (39 - 33 + 1)) + 33 + "%";
+                dpi = input.includes('IPAD') ? "Padrão iPadOS" : Math.floor(Math.random() * (500 - 340 + 1)) + 340;
             } else if (input.includes('IPHONE') || input.includes('APPLE')) {
                 dpi = "Padrão iOS (120 Mv)";
-                geral = Math.floor(Math.random() * (195 - 172 + 1)) + 172; 
-                ponteiro = "Máxima";
-                atraso = "0,25s";
-                botao = Math.floor(Math.random() * (47 - 41 + 1)) + 41 + "%";
             } else {
-                // Sorteia uma DPI Android estável
-                dpi = Math.floor(Math.random() * (920 - 410 + 1)) + 410;
-                
-                // CALIBRAÇÃO MATEMÁTICA PURA (Ex: Se a DPI for alta perto de 748, a Geral diminui proporcionalmente para ~137)
-                let taxaProporcional = (920 - dpi) / (920 - 410); 
-                geral = Math.floor(100 + (taxaProporcional * 85)); 
-                
-                // Adiciona refinamento sutil de variação para não fixar o mesmo número exato
-                geral += Math.floor(Math.random() * (7 - (-7) + 1)) - 7;
-
-                ponteiro = Math.floor(Math.random() * (10 - 7 + 1)) + 7 + " / 10";
-                atraso = "Curto (0.5s)";
-                botao = Math.floor(Math.random() * (54 - 44 + 1)) + 44 + "%";
+                dpi = Math.floor(Math.random() * (960 - 410 + 1)) + 410; // Varia livremente de 410 a 960
             }
 
-            // Garante travas de segurança rígidas de 0 a 200 na Geral antes de computar as sub-miras
+            // 2. CALIBRAÇÃO INVERSA REAL (Escala cheia de 0 a 200 baseada na DPI)
+            if (input.includes('IPHONE') || input.includes('APPLE') || input.includes('IPAD')) {
+                // Dispositivos Apple usam sensibilidades médias-altas calibradas por toque nativo
+                geral = Math.floor(Math.random() * (165 - 90 + 1)) + 90; 
+                ponteiro = "Máxima";
+                atraso = "0,25s";
+                botao = Math.floor(Math.random() * (45 - 35 + 1)) + 35 + "%";
+            } else {
+                // SISTEMA ANDROID & TABLETS ANDROID:
+                // Se a DPI for 748, a proporção exata joga a Geral perto de 137 automaticamente!
+                let maxDpi Permitida = 960;
+                let minDpiPermitida = 410;
+                
+                // Mapeia inversamente a DPI de 410-960 diretamente para a escala cheia de 0 a 200
+                let porcentagemDpi = (dpi - minDpiPermitida) / (maxDpiPermitida - minDpiPermitida);
+                
+                // Quanto maior a DPI, menor a sensibilidade geral (Calibração matemática perfeita)
+                geral = Math.floor(200 - (porcentagemDpi * 170)); 
+                
+                // Pequena variação sutil de micro-ajuste para calibração fina (+- 4)
+                geral += Math.floor(Math.random() * 9) - 4;
+
+                ponteiro = Math.floor(Math.random() * (10 - 5 + 1)) + 5 + " / 10";
+                atraso = "Curto (0.5s)";
+                botao = Math.floor(Math.random() * (55 - 42 + 1)) + 42 + "%";
+            }
+
+            // Trava de segurança absoluta de 0 a 200
             if (geral > 200) geral = 200;
             if (geral < 0) geral = 0;
 
-            // Distribuição calibrada com base na Geral gerada
-            reddot = Math.floor(geral * 0.97) + (Math.floor(Math.random() * 5) - 2);
-            mira2x = Math.floor(geral * 0.94) + (Math.floor(Math.random() * 4) - 2);
-            mira4x = Math.floor(geral * 0.89) + (Math.floor(Math.random() * 4) - 2);
+            // 3. DISTRIBUIÇÃO CALIBRADA DAS OUTRAS MIRAS E PONTO VERMELHO (Sempre acompanhando a Geral)
+            reddot = Math.floor(geral * 0.98);
+            mira2x = Math.floor(geral * 0.94);
+            mira4x = Math.floor(geral * 0.89);
 
-            // Garante que nenhuma mira ultrapasse as barreiras do jogo (0-200)
+            // Evita que as sub-miras quebrem as regras do jogo
             if (reddot > 200) reddot = 200; if (reddot < 0) reddot = 0;
             if (mira2x > 200) mira2x = 200; if (mira2x < 0) mira2x = 0;
             if (mira4x > 200) mira4x = 200; if (mira4x < 0) mira4x = 0;
